@@ -13,8 +13,8 @@ module.exports=(sequelize)=>{
     },
     name:{
         type:DataTypes.ENUM('hombre','mujer','chicos','varios'),
-        allowNull:false
-
+        allowNull:false,
+        
     }
 
   })
