@@ -1,9 +1,9 @@
-const { DataTypes, INTEGER } = require('sequelize');
+const { DataTypes } = require('sequelize');
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('order', {
+  sequelize.define('orderProduct', {
     id: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
         allowNull:false
     },
     price:{
-        type:dataTypes.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false
     }
   });
