@@ -34,9 +34,6 @@ module.exports = (sequelize) => {
         type:DataTypes.INTEGER,
         
     },
-     phoneNumber:{
-        type:DataTypes.INTEGER, 
-    },
     role:{
         type: DataTypes.ENUM('administrador', 'ban','active')
     },
