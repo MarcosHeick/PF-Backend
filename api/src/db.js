@@ -36,6 +36,7 @@ const { Product, Categories } = sequelize.models;
 
 // Aca vendrian las relaciones
 //producto-categoria --->mucho a mucho 
+
 Product.belongsToMany(Categories, { through: 'product-category' })
 Categories.belongsToMany(Product, { through: 'product-category' })
 
