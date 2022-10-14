@@ -44,4 +44,13 @@ const getProducts= async function(req,res){
     res.status(200).send(a)
 }
 
-module.exports = {plusProduct,getProducts}
+const getProductsId = async function(req, res){
+    
+    const { id } = req.params;
+    
+    let resu = await allProducts()
+    let result = resu.filter( ele => ele.id === id)
+    res.status(200).send(result)
+}
+
+module.exports = {plusProduct,getProducts, getProductsId}
