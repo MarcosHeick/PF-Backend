@@ -40,6 +40,8 @@ const { Product, Categories, OrderProduct } = sequelize.models;
 Product.belongsToMany(Categories, { through: 'product-category' })
 Categories.belongsToMany(Product, { through: 'product-category' })
 
+//producto-OrderProduct --->mucho a mucho 
+
 Product.belongsToMany(OrderProduct, { through: 'product-OrderProduct' })
 OrderProduct.belongsToMany(Product, { through: 'product-OrderProduct' })
 
