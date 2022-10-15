@@ -4,13 +4,13 @@ const {Product,Categories,Image} = require('../db')
     const plusProduct =async function(req,res){
         let {
         name,
-        img,
+        image,
         price ,
         stock,
         description,
         category
         }= req.body
-        console.log(req.body)
+      //  console.log(req.body)
         let productCreated =  await Product.create({
             name,
             // img,
@@ -22,13 +22,19 @@ const {Product,Categories,Image} = require('../db')
         const CategoriesDb= await Categories.findOrCreate({
             where:{name : category}
         })
-         const a = await Image.findAll()
-         console.log(Image)
-        // const ImageDb= await Image.findOrCreate({
-        //     where:{img: img}
-        // })
-        //console.log(ImageDb)
-       // productCreated.addImage(ImageDb[0])
+        //  const a = await Image.findAll()
+        //  console.log(Image)
+        if (image.length>0){
+            for(let i =0; i<image.length;i++){
+             console.log(image[i])
+           let a=  await Image.findOrCreate({
+                where :{img: image[i]}
+             })
+        productCreated.addImage(a[0])
+    }
+    }
+        
+     
         productCreated.addCategory(CategoriesDb[0])
         return res.send ('Product Created!')
     }
@@ -41,6 +47,13 @@ const {Product,Categories,Image} = require('../db')
                 trough:{
                     attributes: [],
                 },
+            },
+            include:{
+                model: Image,
+                attributes: ['img'],
+                through:{
+                    attributes:[],
+                }
             }
         })
     }
