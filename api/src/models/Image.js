@@ -4,13 +4,8 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('image', {
-    id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      defaultValue:DataTypes.UUIDV4,
-      primaryKey:true
-    },
-    img :{
+
+    img:{
         type:DataTypes.STRING,
       },
     
