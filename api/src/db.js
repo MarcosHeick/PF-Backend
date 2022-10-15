@@ -45,7 +45,7 @@ Categories.belongsToMany(Product, { through: 'product-category' })
 Product.belongsToMany(OrderProduct, { through: 'product-OrderProduct' })
 OrderProduct.belongsToMany(Product, { through: 'product-OrderProduct' })
 
-//producto-User --->mucho a mucho 
+//producto-User ---> mucho a mucho 
 
 Product.belongsToMany(User, { through: 'product-User' })
 User.belongsToMany(Product, { through: 'product-User' })
