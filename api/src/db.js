@@ -5,9 +5,9 @@ const path = require('path');
 const {
   POST
 } = process.env;
+ 
 
-
-const sequelize = new Sequelize('postgres://nozwumgi:NkK9UXNNllkQGRdYPwZlViWWohEywtWV@heffalump.db.elephantsql.com/nozwumgi', {
+const sequelize = new Sequelize(`${POST}`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });

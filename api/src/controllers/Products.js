@@ -1,6 +1,7 @@
 const { where } = require('sequelize')
 const { Product, Categories, Image } = require('../db')
 
+
 const plusProduct = async function (req, res) {
     let {
         name,
