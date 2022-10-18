@@ -10,4 +10,26 @@ const getUsers = async function (req, res) {
     res.status(200).send(a)
 }
 
-module.exports = { getUsers }
+const postUsers = async function (req, res) {
+    console.log('hola')
+    let{
+        userName,
+        password,
+        email,
+        image,
+        phoneNumber,
+        role
+    } = req.body
+    console.log(req.body)
+    let userCreated = await User.create({
+        userName,
+        password,
+        email,
+        image,
+        phoneNumber,
+        role
+    })
+    res.send('todo ok')
+}
+
+module.exports = { getUsers, postUsers }
