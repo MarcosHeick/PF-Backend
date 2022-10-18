@@ -12,4 +12,7 @@ router.post('/product', plusProduct)
 router.get('/product', getProducts)
 router.get('/product/:id', getProductsId)
 router.get('/products', getProductsByName)
+//rutas Users
+router.get('/users', getUsers)
+
 module.exports = router;
