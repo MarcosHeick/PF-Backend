@@ -13,9 +13,9 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
     },
-    // image :{
-    //   type:DataTypes.STRING,
-    // },
+    mainImage :{
+      type:DataTypes.STRING,
+    },
     price :{
         type:DataTypes.INTEGER,
     },
@@ -29,6 +29,9 @@ module.exports = (sequelize) => {
     value:{
       type:DataTypes.BOOLEAN,
       defaultValue:true
+    },
+    type:{
+      type:DataTypes.STRING,
     }
   });
 };
