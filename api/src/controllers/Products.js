@@ -40,23 +40,35 @@ const plusProduct = async function (req, res) {
     return res.send('Product Created!')
 }
 
-const allProducts = async function () {
-    return await Product.findAll({
-        include: {
-            model: Categories,
-            attributes: ['name'],
-            trough: {
-                attributes: [],
-            },
-        },
-        include: {
-            model: Image,
-            attributes: ['img'],
-            through: {
-                attributes: [],
+const allProducts = async () => {
+    try {
+        const resultDb = await Product.findAll({
+            include: [{ model: Categories, as: 'categories' },
+            { model: Image }],
+        });
+       
+        console.log(resultDb[0]);
+
+        let respuestDb = await resultDb?.map(p => {
+            return {
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                stock: p.stock,
+                description: p.description,
+                value: p.value,
+                categories: p.categories,
+                images: p.images?.map(i => i.img)
+
             }
-        }
-    })
+        })
+
+        return respuestDb;
+
+    } catch (error) {
+        console.log(error);
+
+    }
 }
 
 const getProducts = async function (req, res) {
@@ -89,6 +101,61 @@ const getProductsByName = async function (req, res) {
 
 }
 
+const putProductById = async function (req, res) {
+    const { id } = req.params;
+    const { name, price, stock, description, image } = req.body;
 
 
-module.exports = { plusProduct, getProducts, getProductsId,getProductsByName }
+    const bringProduct = await Product.findByPk(id, {
+        include: {
+            model: Categories,
+            attributes: ['name'],
+            trough: {
+                attributes: [],
+            },
+        },
+        include: {
+            model: Image,
+            attributes: ['img'],
+            through: {
+                attributes: [],
+            }
+        }
+    });
+
+    try {
+        bringProduct.name = name || bringProduct.name;
+        bringProduct.price = price || bringProduct.price;
+        bringProduct.stock = stock || stock === 0 ? stock : bringProduct.stock;
+        bringProduct.description = description || bringProduct.description;
+
+
+        if (image.length > 0) {
+            for (let i = 0; i < image.length; i++) {
+
+                let a = await Image.findOrCreate({
+                    where: { img: image[i] }
+                })
+
+                bringProduct.addImage(a[0])
+            }
+        }
+
+
+        await bringProduct.save()
+        const savedBringProduct = await bringProduct.reload();
+        res.status(200).json(savedBringProduct);
+
+
+
+
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
+
+}
+
+
+
+
+module.exports = { plusProduct, getProducts, getProductsId,getProductsByName,putProductById }
