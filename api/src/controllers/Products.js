@@ -9,16 +9,18 @@ const plusProduct = async function (req, res) {
         price,
         stock,
         description,
-        category
+        category,
+        type,
+        mainImage
     } = req.body
     //  console.log(req.body)
     let productCreated = await Product.create({
         name,
-        // img,
         price,
         stock,
         description,
-
+        type,
+        mainImage
     })
     const CategoriesDb = await Categories.findOrCreate({
         where: { name: category }
@@ -40,14 +42,12 @@ const plusProduct = async function (req, res) {
     return res.send('Product Created!')
 }
 
-const allProducts = async () => {
+const allProducts = async function () {
     try {
         const resultDb = await Product.findAll({
             include: [{ model: Categories, as: 'categories' },
             { model: Image }],
         });
-       
-        console.log(resultDb[0]);
 
         let respuestDb = await resultDb?.map(p => {
             return {
@@ -57,6 +57,9 @@ const allProducts = async () => {
                 stock: p.stock,
                 description: p.description,
                 value: p.value,
+                type: p.type,
+                mainImage: p.mainImage,
+
                 categories: p.categories,
                 images: p.images?.map(i => i.img)
 
@@ -93,69 +96,74 @@ const getProductsByName = async function (req, res) {
 
     const resultDbByName = await allProducts();
 
-    let a=search.toLowerCase();
+    let a = search.toLowerCase();
 
     const filterDbByName = resultDbByName.filter(prod => prod.name.toLowerCase().includes(a));
 
     res.status(200).json(filterDbByName)
 
 }
-
 const putProductById = async function (req, res) {
+
+    //MUY IMPORTANTE AL PASAR IMAGE POR BODY SIEMPRE TIENE QUE SER DIFERENTE!!! 
     const { id } = req.params;
-    const { name, price, stock, description, image } = req.body;
+    const { name, price, stock, description, image, mainImage } = req.body;
 
 
     const bringProduct = await Product.findByPk(id, {
-        include: {
-            model: Categories,
-            attributes: ['name'],
-            trough: {
-                attributes: [],
-            },
-        },
-        include: {
-            model: Image,
-            attributes: ['img'],
-            through: {
-                attributes: [],
-            }
-        }
+        include:
+            { model: Image },
     });
+    console.log(bringProduct, 'denoche');
 
+
+    if (!image[0]) {
+        return res.status(400).send('El producto debe contener al menos una imagen');
+    }
+    if (!bringProduct) {
+        return res.status(400).send('No se encontró el Producto :(');
+    }
     try {
         bringProduct.name = name || bringProduct.name;
         bringProduct.price = price || bringProduct.price;
         bringProduct.stock = stock || stock === 0 ? stock : bringProduct.stock;
         bringProduct.description = description || bringProduct.description;
+        bringProduct.mainImage = mainImage || bringProduct.mainImage;
+        // console.log(bringProduct.images[0]);
 
+        if (image) {
+            // const aux=bringProduct.images.map(e=>e.img)
+            // console.log(aux,'denoche');
 
-        if (image.length > 0) {
+            bringProduct.images.map(pic => {
+                Image.destroy({ where: { img: pic.img } })
+            });
+            // await Image.destroy({ where: { productId: bringProduct.id} })
             for (let i = 0; i < image.length; i++) {
-
+                // console.log(image[i])
                 let a = await Image.findOrCreate({
                     where: { img: image[i] }
                 })
-
+                // console.log(a);
                 bringProduct.addImage(a[0])
             }
         }
 
-
         await bringProduct.save()
         const savedBringProduct = await bringProduct.reload();
-        res.status(200).json(savedBringProduct);
+        return res.status(200).json(savedBringProduct);
 
 
 
 
     } catch (error) {
-        res.status(400).json({ error: error.message })
+        return res.status(400).json({ error: error.message })
     }
+
+
 
 }
 
 
 
-
-module.exports = { plusProduct, getProducts, getProductsId,getProductsByName,putProductById }
+module.exports = { plusProduct, getProducts, getProductsId, getProductsByName,putProductById }
