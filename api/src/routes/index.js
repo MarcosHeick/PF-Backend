@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 //para cloudinary
 const upload = require('../utils/multer');
-const { nuevaImagen } = require('../controllers/routePrueba')
+    // const { nuevaImagen } = require('../controllers/routePrueba')
 
 //
 
