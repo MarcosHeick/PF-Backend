@@ -1,6 +1,6 @@
 const { where } = require('sequelize')
-const { Product, Categories, Image,Size } = require('../db')
-
+const { Product, Categories, Image, Size } = require('../db')
+const cloudinary = require('../utils/cloudinary');
 
 const plusProduct = async function (req, res) {
     let {
@@ -30,17 +30,17 @@ const plusProduct = async function (req, res) {
     //  console.log(Image)
     if (image.length > 0) {
         for (let i = 0; i < image.length; i++) {
-     
+
             let a = await Image.findOrCreate({
                 where: { img: image[i] }
             })
             productCreated.addImage(a[0])
         }
     }
- 
+
     if (size.length > 0) {
         for (let i = 0; i < size.length; i++) {
-         
+
             let a = await Size.findOrCreate({
                 where: { siz3: size[i] }
             })
@@ -49,16 +49,23 @@ const plusProduct = async function (req, res) {
     }
 
     productCreated.addCategory(CategoriesDb[0])
-    return res.send('Product Created!')
+    const j=productCreated.id;
+    return res.status(200).send(j)
 }
 
 const allProducts = async function () {
     try {
         const resultDb = await Product.findAll({
             include: [{ model: Categories, as: 'categories' },
-            { model: Image }, {model: Size}],
+            { model: Image }, { model: Size }],
         });
-       // console.log(await resultDb)
+        // console.log(await resultDb)
+
+        let a = await Image.findAll({})
+        let aMAP = await a?.map(imagen => {
+            return { id_product: imagen.id_product, img: imagen.img };
+        })
+
         let respuestDb = await resultDb?.map(p => {
             return {
                 id: p.id,
@@ -69,9 +76,14 @@ const allProducts = async function () {
                 value: p.value,
                 type: p.type,
                 mainImage: p.mainImage,
-                sizes:p.sizes?.map(e=>e.siz3),
+                sizes: p.sizes?.map(e => e.siz3),
                 categories: p.categories,
-                images: p.images?.map(i => i.img)
+                images: p.images.length !== 0 ? p.images.map(i => i.img) : (
+                    aMAP.filter(e => {
+                        if (e.id_product === p.id) {
+                            return e.img;
+                        }
+                    })).map(sii => sii.img)
 
             }
         })
@@ -175,5 +187,46 @@ const putProductById = async function (req, res) {
 }
 
 
+const addImagesByIdProduct = async (req, res) => {
+    //   /:id_product/images
 
-module.exports = { plusProduct, getProducts, getProductsId, getProductsByName,putProductById }
+    const { id_product } = req.params;
+    const { img_body } = req.body
+
+    // const traerProductId = await Product.findByPk(id_product, {
+    //     include:
+    //         { model: Image }
+    // })
+
+    if (!req.file) {
+        return res.json('Para continuar seleccione una imagen');
+    }
+
+    try {
+
+        const cloudinary_image = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'imagesArray'
+        });
+
+        let img = cloudinary_image.secure_url;
+
+        await Image.create({ id_product, img })
+
+
+
+
+        res.status(200).json('se subio la imagen')
+
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+
+    }
+
+    // console.log(traerProductId);
+    // console.log(typeof traerProductId);
+
+}
+
+
+
+module.exports = { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct }
