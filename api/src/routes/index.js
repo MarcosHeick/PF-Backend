@@ -4,7 +4,7 @@ const { plusProduct, getProducts, getProductsId, getProductsByName,putProductByI
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const { getUsers, postUsers,putUserById } = require('../controllers/Users');
-const { postLogin } = require('../controllers/logins')
+const { postLogin,verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
 
 
@@ -20,10 +20,12 @@ router.get('/products', getProductsByName)
 router.put('/product/:id', putProductById)
 
 //rutas Users
-router.get('/users', getUsers)
+router.get('/users',verification, getUsers)
 router.post('/users', postUsers)
 router.put('/users/:id',putUserById)
 //rutas Login
 router.post('/login', postLogin);
-
+router.get('/info',verification, (req,res)=>{
+    res.json('INFO entregada')
+} )
 module.exports = router;
