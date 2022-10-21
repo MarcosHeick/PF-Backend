@@ -1,5 +1,5 @@
 const { where } = require('sequelize')
-const { Product, Categories, Image } = require('../db')
+const { Product, Categories, Image,Size } = require('../db')
 
 
 const plusProduct = async function (req, res) {
@@ -11,7 +11,8 @@ const plusProduct = async function (req, res) {
         description,
         category,
         type,
-        mainImage
+        mainImage,
+        size
     } = req.body
     //  console.log(req.body)
     let productCreated = await Product.create({
@@ -29,14 +30,23 @@ const plusProduct = async function (req, res) {
     //  console.log(Image)
     if (image.length > 0) {
         for (let i = 0; i < image.length; i++) {
-            console.log(image[i])
+     
             let a = await Image.findOrCreate({
                 where: { img: image[i] }
             })
             productCreated.addImage(a[0])
         }
     }
-
+ 
+    if (size.length > 0) {
+        for (let i = 0; i < size.length; i++) {
+         
+            let a = await Size.findOrCreate({
+                where: { siz3: size[i] }
+            })
+            productCreated.addSize(a[0])
+        }
+    }
 
     productCreated.addCategory(CategoriesDb[0])
     return res.send('Product Created!')
@@ -46,9 +56,9 @@ const allProducts = async function () {
     try {
         const resultDb = await Product.findAll({
             include: [{ model: Categories, as: 'categories' },
-            { model: Image }],
+            { model: Image }, {model: Size}],
         });
-
+       // console.log(await resultDb)
         let respuestDb = await resultDb?.map(p => {
             return {
                 id: p.id,
@@ -59,7 +69,7 @@ const allProducts = async function () {
                 value: p.value,
                 type: p.type,
                 mainImage: p.mainImage,
-
+                sizes:p.sizes?.map(e=>e.siz3),
                 categories: p.categories,
                 images: p.images?.map(i => i.img)
 
