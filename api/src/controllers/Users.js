@@ -76,4 +76,4 @@ const putUserById = async (req, res) => {
 
 }
 
-module.exports = { getUsers, postUsers, putUserById }
+module.exports = { getUsers, postUsers, putUserById, allUsers }
