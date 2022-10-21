@@ -1,11 +1,17 @@
 
 const { Router } = require('express');
-const { plusProduct, getProducts, getProductsId, getProductsByName,putProductById } = require('../controllers/Products');
+const { plusProduct, getProducts, getProductsId, getProductsByName,putProductById ,addImagesByIdProduct} = require('../controllers/Products');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const { getUsers, postUsers,putUserById } = require('../controllers/Users');
 const { postLogin,verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
+
+//para cloudinary
+const upload = require('../utils/multer');
+const { nuevaImagen } = require('../controllers/routePrueba')
+
+//
 
 
 
@@ -18,6 +24,7 @@ router.get('/product', getProducts)
 router.get('/product/:id', getProductsId)
 router.get('/products', getProductsByName)
 router.put('/product/:id', putProductById)
+router.post('/:id_product/images', upload.single("imagen"), addImagesByIdProduct)
 
 //rutas Users
 router.get('/users',verification, getUsers)

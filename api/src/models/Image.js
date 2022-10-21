@@ -5,9 +5,12 @@ module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('image', {
 
-    img:{
-        type:DataTypes.STRING,
-      },
-    
+    img: {
+      type: DataTypes.STRING,
+    },
+    id_product: {
+      type: DataTypes.STRING
+    }
+
   });
 };
