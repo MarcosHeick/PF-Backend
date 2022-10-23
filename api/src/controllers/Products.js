@@ -253,13 +253,7 @@ const addImagesByIdProduct = async (req, res) => {
 
 }
 
-const deleteImgById = async (req,res) => {
-    //  /:id_product/images/:id_img
-    const {id_product,id_img}=req.params;
-
-    await Image.destroy({where:{id_img,id_product}})
-    res.status(200).json('imagen eliminada!!')
-}
 
 
-module.exports = { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct ,deleteImgById}
+
+module.exports = { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct }
