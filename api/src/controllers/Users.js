@@ -1,13 +1,21 @@
 const { User } = require('../db')
 
 const allUsers = async function () {
-    return await User.findAll()
+    try {
+        return await User.findAll()
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+    }
 }
 
 const getUsers = async function (req, res) {
-    let a = await allUsers()
-    //console.log(a)
-    res.status(200).send(a)
+    try {
+        let a = await allUsers()
+        //console.log(a)
+    } catch (error) {
+        res.status(200).send(a)
+        return res.status(400).json({ error: error.message })
+    }
 }
 
 const postUsers = async function (req, res) {
@@ -21,15 +29,20 @@ const postUsers = async function (req, res) {
         role
     } = req.body
     console.log(req.body)
-    let userCreated = await User.create({
-        userName,
-        password,
-        email,
-        image,
-        phoneNumber,
-        role
-    })
-    res.send('todo ok')
+
+    try {
+        let userCreated = await User.create({
+            userName,
+            password,
+            email,
+            image,
+            phoneNumber,
+            role
+        })
+        res.send('todo ok')
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+    }
 }
 const putUserById = async (req, res) => {
 
