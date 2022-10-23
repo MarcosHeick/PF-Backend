@@ -12,7 +12,7 @@ const { sendEmail } = require('../controllers/SendEmail')
 
 //para cloudinary
 const upload = require('../utils/multer');
-const { nuevaImagen } = require('../controllers/routePrueba')
+
 
 //
 
