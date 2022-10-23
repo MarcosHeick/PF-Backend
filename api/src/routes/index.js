@@ -14,6 +14,10 @@ const { sendEmail } = require('../controllers/SendEmail')
 const upload = require('../utils/multer');
 
 
+
+    // const { nuevaImagen } = require('../controllers/routePrueba')
+
+
 //
 
 
@@ -26,9 +30,8 @@ router.post('/product', plusProduct)
 router.get('/product', getProducts)
 router.get('/product/:id', getProductsId)
 router.get('/products', getProductsByName)
-router.put('/product/:id', putProductById)
-router.post('/:id_product/images', upload.single("imagen"), addImagesByIdProduct)
-
+router.put('/product/:id_product', putProductById)
+router.post('/product/images', upload.array("imagen",5), addImagesByIdProduct)
 //rutas Users
 router.get('/users',verification, getUsers)
 router.post('/users', postUsers)
