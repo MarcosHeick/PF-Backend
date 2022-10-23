@@ -8,6 +8,7 @@ const { getOrder } = require('../controllers/Order')
 const { getOrderProduct } = require('../controllers/OrderProduct')
 const { postLogin,verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
+const { sendEmail } = require('../controllers/SendEmail')
 
 //para cloudinary
 const upload = require('../utils/multer');
@@ -41,5 +42,8 @@ router.get('/info',verification, (req,res)=>{
 router.get('/order', getOrder)
 //rutas OrderProduct
 router.get('/orderProduct', getOrderProduct)
+//router
+router.post('/send-email', sendEmail)
+
 
 module.exports = router;
