@@ -1,14 +1,15 @@
 const nodemailer = require('nodemailer')
 
 
-const sendEmail = async function(req, res) {
+const sendEmail = async function(email,ID) {
+    
     const transporter = await nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
         secure:true,
         auth: {
-            user: 'guille.fernandeeez@gmail.com',
-            pass: 'hpxjhtbeoybhdmor'
+            user: 'velveteccomerce@gmail.com',
+            pass: 'jbppkfqawhietail'
         }
     });
 
@@ -24,11 +25,12 @@ const sendEmail = async function(req, res) {
     } */
     await transporter.sendMail({
         from: 'Velvet',
-        to: 'guille.fernandeeez@gmail.com',  
-        subject: 'Enviando desde Velvet',
-        text:'bueno esta funcionando yeah!'
+        to: email,  
+        subject: 'Send from Velvet',
+        // text:'Verify your email',
+            html: `Press <a href="https://velvet.up.railway.app/verification/${ID}"> Here</a>  your email`
     })
-    res.send('todo ok')
+    // res.send('todo ok')
 }
 
 

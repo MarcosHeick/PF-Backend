@@ -14,10 +14,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       
     },
-    password:{
-      type:DataTypes.INTEGER,
-      
-    },
+  
+  
     email:{
         type:DataTypes.STRING,
         
@@ -35,7 +33,11 @@ module.exports = (sequelize) => {
         
     },
     role:{
-        type: DataTypes.ENUM('admin', 'ban','active')
+        type: DataTypes.ENUM('admin', 'ban','active','inactive'),
+        defaultValue: 'inactive'
     },
+    random:{
+      type: DataTypes.STRING,
+    }
   });
 };

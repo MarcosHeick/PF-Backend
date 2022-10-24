@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { plusProduct, getProducts, getProductsId, getProductsByName,putProductById ,addImagesByIdProduct} = require('../controllers/Products');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-const { getUsers, postUsers,putUserById } = require('../controllers/Users');
+const { getUsers, postUsers,putUserById,putUserById1 } = require('../controllers/Users');
 const { getOrder } = require('../controllers/Order')
 const { getOrderProduct } = require('../controllers/OrderProduct')
 const { postLogin,verification } = require('../controllers/logins')
@@ -33,8 +33,9 @@ router.get('/products', getProductsByName)
 router.put('/product/:id_product', putProductById)
 router.post('/product/images', upload.array("imagen",5), addImagesByIdProduct)
 //rutas Users
-router.get('/users',verification, getUsers)
+router.get('/users', getUsers)
 router.post('/users', postUsers)
+router.put('/verification/:id',putUserById1)
 router.put('/users/:id',putUserById)
 //rutas Login
 router.post('/login', postLogin);
