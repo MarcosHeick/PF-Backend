@@ -2,7 +2,7 @@ const { Order } = require('../db')
 
 const allOrder = async function () {
     try {
-        return await Order.findAll()
+         await Order.findAll()
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }

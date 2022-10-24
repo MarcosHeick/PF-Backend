@@ -1,19 +1,29 @@
 const { User } = require('../db')
-
-const allUsers = async function () {
-    try {
-        return await User.findAll()
-    } catch (error) {
-        return res.status(400).json({ error: error.message })
+const { sendEmail } = require('./SendEmail')
+const as = () => {
+    const len = 8
+    let randStr = ''
+    for (let i = 0; i < len; i++) {
+        const ch = Math.floor((Math.random() * 10) + 1)
+        randStr += ch
     }
+    return randStr
+}
+const allUsers = async function () {
+
+    return await User.findAll()
+
+
+
 }
 
 const getUsers = async function (req, res) {
     try {
         let a = await allUsers()
         //console.log(a)
+        return res.status(200).send(a)
     } catch (error) {
-        res.status(200).send(a)
+
         return res.status(400).json({ error: error.message })
     }
 }
@@ -30,6 +40,7 @@ const postUsers = async function (req, res) {
     } = req.body
     console.log(req.body)
 
+    random = as()
     try {
         let userCreated = await User.create({
             userName,
@@ -37,8 +48,11 @@ const postUsers = async function (req, res) {
             email,
             image,
             phoneNumber,
-            role
+            role,
+            random
         })
+        const ID = userCreated.id
+        await sendEmail(email, ID)
         res.send('todo ok')
     } catch (error) {
         return res.status(400).json({ error: error.message })
@@ -89,4 +103,34 @@ const putUserById = async (req, res) => {
 
 }
 
-module.exports = { getUsers, postUsers, putUserById, allUsers }
+const putUserById1 = async (req, res) => {
+
+    // const { email, image, phoneNumber, role, address } = req.body;
+    const { id } = req.params;
+    const {random} = req.body
+
+    const bringUser = await User.findByPk(id, {});
+    console.log(bringUser.dataValues.role)
+    if (bringUser.dataValues.random === random){
+
+    let upUser = {};
+
+    upUser.role = "active";
+
+
+
+    try {
+        await User.update(upUser, { where: { id } })
+        return res.status(200).json('updated information!!');
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+    }
+    }
+    else{
+        return res.status(404).json('Wrong Number verification')
+    }
+
+    // const fetchUsers = await User.findByPk(id_user,{})
+
+}
+module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 }
