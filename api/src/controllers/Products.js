@@ -39,13 +39,14 @@ const plusProduct = async function (req, res) {
                 productCreated.addImage(a[0])
             }
         }
-
+        console.log(size)
         if (size.length > 0) {
             for (let i = 0; i < size.length; i++) {
 
                 let a = await Size.findOrCreate({
                     where: { siz3: size[i] }
                 })
+                
                 productCreated.addSize(a[0])
             }
         }
@@ -126,15 +127,15 @@ const getProductsId = async function (req, res) {
 
 
 const getProductsByName = async function (req, res) {
-    // console.log(req.query);
+    console.log(req.query);
     const { search } = req.query;
-
+    
     try {
         const resultDbByName = await allProducts();
 
-        let a = search.toLowerCase();
+        let a = search?.toLowerCase();
 
-        const filterDbByName = resultDbByName.filter(prod => prod.name.toLowerCase().includes(a));
+    const filterDbByName = resultDbByName.filter(prod => prod.name?.toLowerCase().includes(a));
 
         res.status(200).json(filterDbByName)
 
