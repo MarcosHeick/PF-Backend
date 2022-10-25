@@ -12,7 +12,8 @@ const plusProduct = async function (req, res) {
         category,
         type,
         mainImage,
-        size
+        size,
+        bestSellers
     } = req.body
     //  console.log(req.body)
     try {
@@ -23,7 +24,8 @@ const plusProduct = async function (req, res) {
             stock,
             description,
             type,
-            mainImage
+            mainImage,
+            bestSellers
         })
         const CategoriesDb = await Categories.findOrCreate({
             where: { name: category }
@@ -88,7 +90,8 @@ const allProducts = async function () {
                         if (e.id_product === p.id) {
                             return e.img;
                         }
-                    })).map(sii => sii.img)
+                    })).map(sii => sii.img),
+                bestSellers: p.bestSellers,
 
             }
         })
@@ -203,6 +206,7 @@ const putProductById = async function (req, res) {
         req.body.description && (obj.description = req.body.description)
         req.body.mainImage && (obj.mainImage = req.body.mainImage)
         // req.body.image && (obj.image = req.body.image)
+        req.body.bestSellers && (obj.bestSellers = req.body.bestSellers)
 
         await Product.update(obj, { where: { id: id_product } })
         res.status(200).json(obj)

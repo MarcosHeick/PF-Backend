@@ -7,16 +7,24 @@ module.exports = (sequelize) => {
     id: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue:DataTypes.UUIDV4,
-      primaryKey:true
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
     },
     description: {
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
-    score :{
-      type:DataTypes.INTEGER,
-      allowNull:false
+    score: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: {
+          args: 1
+        },
+        max: {
+          args: 5
+        },
+      }
     }
   });
 };
