@@ -25,6 +25,10 @@ module.exports = (sequelize) => {
           args: 5
         },
       }
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     }
   });
 };

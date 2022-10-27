@@ -10,14 +10,6 @@ module.exports = (sequelize) => {
       defaultValue:DataTypes.UUIDV4,
       primaryKey:true
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull:false,
-    },
-    direction: {
-        type: DataTypes.STRING,
-        allowNull:false,
-      },
     quantity :{
         type: DataTypes.INTEGER,
         allowNull:false
