@@ -37,43 +37,92 @@ const { Product, Categories, OrderProduct, User, Image, Review ,Order,Size} = se
 // Aca vendrian las relaciones
 //producto-categoria --->mucho a mucho 
 
-Product.belongsToMany(Categories, { through: 'product-category' })
-Categories.belongsToMany(Product, { through: 'product-category' })
+// Product.belongsToMany(Categories, { through: 'product-category' })
+// Categories.belongsToMany(Product, { through: 'product-category' })
 
-//producto-OrderProduct --->mucho a mucho 
+// //producto-OrderProduct --->mucho a mucho 
 
-Product.belongsToMany(OrderProduct, { through: 'product-OrderProduct' })
-OrderProduct.belongsToMany(Product, { through: 'product-OrderProduct' })
+// Product.belongsToMany(OrderProduct, { through: 'product-OrderProduct' })
+// OrderProduct.belongsToMany(Product, { through: 'product-OrderProduct' })
 
-//producto-User ---> mucho a mucho 
+// //producto-User ---> mucho a mucho 
 
-Product.belongsToMany(User, { through: 'product-User' })
-User.belongsToMany(Product, { through: 'product-User' })
+// Product.belongsToMany(User, { through: 'product-User' })
+// User.belongsToMany(Product, { through: 'product-User' })
 
-//producto-Image --->mucho a mucho 
+// //producto-Image --->mucho a mucho 
 
-Product.belongsToMany(Image, { through: 'product-Image' })
-Image.belongsToMany(Product, { through: 'product-Image' })
+// Product.belongsToMany(Image, { through: 'product-Image' })
+// Image.belongsToMany(Product, { through: 'product-Image' })
 
-//producto-Review --->mucho a mucho 
+// //producto-Review --->mucho a mucho 
 
-Product.belongsToMany(Review, { through: 'product-Review' })
-Review.belongsToMany(Product, { through: 'product-Review' })
+// Product.belongsToMany(Review, { through: 'product-Review' })
+// Review.belongsToMany(Product, { through: 'product-Review' })
 
-//User-Review --->mucho a mucho 
+// //User-Review --->mucho a mucho 
 
-User.belongsToMany(Review, { through: 'User-Review' })
-Review.belongsToMany(User, { through: 'User-Review' })
-//
-User.belongsToMany(OrderProduct, { through : 'User-Orderproduct'})
-OrderProduct.belongsToMany(User,{through:'User-Orderproduct'})
-//
-Product.belongsToMany(Size, {through: 'Product-Size'})
-Size.belongsToMany(Product,{through:'Product-Size'})
-//
-Order.belongsToMany(OrderProduct,{through: 'Order-OrderProduct'})
-OrderProduct.belongsToMany(Order,{through: 'Order-OrderProduct'})
+// User.belongsToMany(Review, { through: 'User-Review' })
+// Review.belongsToMany(User, { through: 'User-Review' })
+// //
+// User.belongsToMany(OrderProduct, { through : 'User-Orderproduct'})
+// OrderProduct.belongsToMany(User,{through:'User-Orderproduct'})
+// //
+// Product.belongsToMany(Size, {through: 'Product-Size'})
+// Size.belongsToMany(Product,{through:'Product-Size'})
+// //
+// Order.belongsToMany(OrderProduct,{through: 'Order-OrderProduct'})
+// OrderProduct.belongsToMany(Order,{through: 'Order-OrderProduct'})
 //////
+
+//De prueba de momento
+Product.belongsToMany(Categories, {
+  through: 'product-category',
+  as: "categories",
+  foreignKey: 'product_id'
+})
+Categories.belongsToMany(Product, {
+  through: 'product-category',
+  as: "products",
+  foreignKey: 'category_id'
+})
+
+//producto-Order --->M:M 
+Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
+Order.belongsToMany(Product, { through: OrderProduct, foreignKey: 'product_id' })
+
+//producto-User --->M:M
+Product.belongsToMany(User, {
+  through: 'product-User',
+  foreignKey:'user_id'
+})
+User.belongsToMany(Product, { 
+  through: 'product-User',
+  foreignKey:'product_id'
+ })
+
+//producto-Image --->1:M 
+
+Product.hasMany(Image, { foreignKey: 'product_id' })
+Image.belongsTo(Product, { foreignKey: 'product_id' })
+
+//producto-Review --->1:M
+Product.hasMany(Review, { foreignKey: 'product_id' })
+Review.belongsTo(Product, { foreignKey: 'product_id' })
+
+
+//User-Review --->1:M
+
+User.hasMany(Review, { foreignKey: 'user_id' })
+Review.belongsTo(User, { foreignKey: 'user_id' })
+
+Product.belongsToMany(Size, { through: 'Product-Size' })
+Size.belongsToMany(Product, { through: 'Product-Size' })
+
+//User-Order
+
+User.hasMany(Order, { foreignKey: 'user_id' })
+Order.belongsTo(User, { foreignKey: 'user_id' })
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
