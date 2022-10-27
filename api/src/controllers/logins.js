@@ -15,7 +15,7 @@ const postLogin = async function (req, res) {
     const a = Users.filter( e => e.userName === userName)
     //console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
-    if(a.length && a[0].dataValues.password == password){
+    if(a.length && a[0].dataValues.password === password){
         const payload = {
             check:true
         }
@@ -24,7 +24,9 @@ const postLogin = async function (req, res) {
         })
         res.json({
             message:'autentificacion correcta',
-            token: token
+            token: token,
+            id: a[0].dataValues.id,
+            role: a[0].dataValues.role
         })
     }else{
         res.json({
