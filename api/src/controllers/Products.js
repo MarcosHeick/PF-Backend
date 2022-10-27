@@ -226,7 +226,7 @@ const addImagesByIdProduct = async (req, res) => {
     //   /product/images
 
 
-    if (!req.file) {
+    if (!req.files) {
         return res.json('Para continuar seleccione una imagen');
     }
 
