@@ -29,7 +29,7 @@ const getUsers = async function (req, res) {
 }
 
 const postUsers = async function (req, res) {
-    console.log('hola')
+    const a= await allUsers()
     let {
         userName,
         password,
@@ -38,8 +38,10 @@ const postUsers = async function (req, res) {
         phoneNumber,
         role
     } = req.body
-    console.log(req.body)
-
+  if(  a.filter(e=> e.userName===userName) ){
+    return res.status(200).send("Existe ese usario")
+  }
+else{
     random = as()
     try {
         let userCreated = await User.create({
@@ -57,6 +59,7 @@ const postUsers = async function (req, res) {
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
+}
 }
 const putUserById = async (req, res) => {
 
