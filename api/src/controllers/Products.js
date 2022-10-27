@@ -15,7 +15,7 @@ const plusProduct = async function (req, res) {
         size,
         bestSellers
     } = req.body
-    //  console.log(req.body)
+    console.log(req.body)
     try {
 
         let productCreated = await Product.create({
@@ -31,7 +31,7 @@ const plusProduct = async function (req, res) {
             where: { name: category }
         })
         //  const a = await Image.findAll()
-        //  console.log(Image)
+        console.log(Image)
         if (image.length > 0) {
             for (let i = 0; i < image.length; i++) {
 
@@ -53,8 +53,8 @@ const plusProduct = async function (req, res) {
         }
 
         productCreated.addCategory(CategoriesDb[0])
-        const j = productCreated.id;
-        return res.status(200).send(j)
+        // const j = productCreated.id;
+        return res.status(200).send(productCreated)
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
@@ -244,8 +244,42 @@ const addImagesByIdProduct = async (req, res) => {
             Image.create({ img })
         });
         // await Image.create({ id_product, img })
+        console.log(imgUrlArray);
 
         res.status(200).json(imgUrlArray)
+
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+
+    }
+
+    // console.log(traerProductId);
+    // console.log(typeof traerProductId);
+
+}
+
+const addImagesByIdProductSingle = async (req, res) => {
+    //   /product/images
+
+
+    if (!req.file) {
+        return res.json('Para continuar seleccione una imagen');
+    }
+
+    try {
+
+
+        const cloudinary_image = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'imagenes_prueba'
+        });
+
+
+
+        Image.create({ img: cloudinary_image.secure_url })
+        console.log(cloudinary_image.secure_url);
+        // let response = buildSuccessMsg([cloudinary_image.secure_url])
+
+        res.status(200).json(cloudinary_image.secure_url)
 
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -260,4 +294,4 @@ const addImagesByIdProduct = async (req, res) => {
 
 
 
-module.exports = { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct }
+module.exports = { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct ,addImagesByIdProductSingle}

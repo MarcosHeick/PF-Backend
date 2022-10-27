@@ -1,6 +1,7 @@
 
 const { Router } = require('express');
-const { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct } = require('../controllers/Products');
+const { plusProduct, getProducts, getProductsId, getProductsByName, putProductById, addImagesByIdProduct, addImagesByIdProductSingle } = require('../controllers/Products');
+
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const { getUsers, postUsers, putUserById, putUserById1 } = require('../controllers/Users');
@@ -24,6 +25,7 @@ router.get('/product/:id', getProductsId)
 router.get('/products', getProductsByName)
 router.put('/product/:id_product', putProductById)
 router.post('/product/images', upload.array("imagen", 5), addImagesByIdProduct)
+router.post('/product/image', upload.single("imagen1"), addImagesByIdProductSingle)
 //rutas Users
 router.get('/users', getUsers)
 router.post('/users', postUsers)
