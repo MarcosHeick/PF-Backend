@@ -60,11 +60,21 @@ const postUsers = async function (req, res) {
 }
 const putUserById = async (req, res) => {
 
-    // const { email, image, phoneNumber, role, address } = req.body;
-    const { id_user } = req.params;
-    const reqBodyArray = Object.keys(req.body)
-
-    console.log(reqBodyArray);
+    const { email, image, phoneNumber, userName } = req.body;
+    console.log("destructurados",email, image, phoneNumber, userName )
+    let arr = {}
+    if(email)  arr.email = email
+    if(image){ 
+        let i = image.slice(12,image.length)
+        console.log(i)
+        arr.image= i
+    }
+    if(phoneNumber)  arr.phoneNumber = phoneNumber
+    if(userName) arr.userName = userName
+    const { id } = req.params;
+    const reqBodyArray = Object.keys(arr)
+    console.log("esto es arr ", arr)
+    console.log("esto es el body",reqBodyArray);
 
     let upUser = {};
 
@@ -77,22 +87,22 @@ const putUserById = async (req, res) => {
                 upUser.email = req.body.email;
                 break;
             case 'image':
-                upUser.image = req.body.image;
+                upUser.image = req.body.image.slice(12,req.body.image.length);
                 break;
             case 'phoneNumber':
                 upUser.phoneNumber = req.body.phoneNumber;
                 break;
-            case 'address':
+           /*  case 'address':
                 upUser.address = req.body.address;
                 break;
             case 'role':
                 upUser.role = req.body.role;
-                break;
+                break; */
         }
     });
 
     try {
-        await User.update(upUser, { where: { id_user } })
+        await User.update(upUser, { where: { id } })
         return res.status(200).json('updated information!!');
     } catch (error) {
         return res.status(400).json({ error: error.message })

@@ -36,6 +36,10 @@ module.exports = (sequelize) => {
     bestSellers: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     }
   });
 };

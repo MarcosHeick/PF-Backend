@@ -87,9 +87,9 @@ Categories.belongsToMany(Product, {
   foreignKey: 'category_id'
 })
 
-//producto-OrderProduct --->M:M 
-Product.belongsToMany(OrderProduct, { through: 'product-OrderProduct' })
-OrderProduct.belongsToMany(Product, { through: 'product-OrderProduct' })
+//producto-Order --->M:M 
+Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
+Order.belongsToMany(Product, { through: OrderProduct, foreignKey: 'product_id' })
 
 //producto-User --->M:M
 Product.belongsToMany(User, {
@@ -119,6 +119,10 @@ Review.belongsTo(User, { foreignKey: 'user_id' })
 Product.belongsToMany(Size, { through: 'Product-Size' })
 Size.belongsToMany(Product, { through: 'Product-Size' })
 
+//User-Order
+
+User.hasMany(Order, { foreignKey: 'user_id' })
+Order.belongsTo(User, { foreignKey: 'user_id' })
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
