@@ -54,6 +54,7 @@ else{
             role,
             random
         })
+        console.log(email)
         const ID = userCreated.id
         await sendEmail(email, ID)
         res.send('todo ok')
