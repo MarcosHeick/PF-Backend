@@ -28,7 +28,7 @@ const sendEmail = async function(email,ID,random) {
         to: email,  
         subject: 'Send from Velvet',
         // text:'Verify your email',
-            html: `Press <a href="https://velvet.up.railway.app/verification/${ID}"> Here</a> to verify your email code ${random}`
+            html: `Press <a href="https://velvetpf.vercel.app/verification/${ID}"> Here</a> to verify your email code ${random}`
     })
     // res.send('todo ok')
 }
