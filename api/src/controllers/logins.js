@@ -37,7 +37,7 @@ const postLogin = async function (req, res) {
 
 function verification (req,res,next){
     let token = req.headers['x-acces-token'] || req.headers['authorization'];
-    console.log(token)
+    console.log(req.headers)
     if (!token){
         res.status(401).send({
             error:'Necesitas token'
