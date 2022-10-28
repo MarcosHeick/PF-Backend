@@ -38,7 +38,8 @@ const postUsers = async function (req, res) {
         phoneNumber,
         role
     } = req.body
-  if(  a.filter(e=> e.userName===userName) ){
+    console.log(a.filter(e=> e.userName===userName))
+  if(  a.filter(e=> e.userName===userName).length>0 ){
     return res.status(200).send("Existe ese usario")
   }
 else{
