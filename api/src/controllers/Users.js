@@ -56,7 +56,7 @@ else{
         })
         console.log(email)
         const ID = userCreated.id
-        await sendEmail(email, ID)
+        await sendEmail(email, ID,random)
         res.send('todo ok')
     } catch (error) {
         return res.status(400).json({ error: error.message })
