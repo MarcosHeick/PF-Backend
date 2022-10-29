@@ -26,10 +26,14 @@ const getUsers = async function (req, res) {
 
         return res.status(400).json({ error: error.message })
     }
+    
 }
 
 const postUsers = async function (req, res) {
-    const a= await allUsers()
+
+    
+
+    console.log('hola')
     let {
         userName,
         password,
@@ -38,11 +42,23 @@ const postUsers = async function (req, res) {
         phoneNumber,
         role
     } = req.body
-    console.log(a.filter(e=> e.userName===userName))
-  if(  a.filter(e=> e.userName===userName).length>0 ){
-    return res.status(200).send("Existe ese usario")
-  }
-else{
+    //console.log(req.body)
+
+    let a = await allUsers();
+    //console.log("esto es a ", a)
+    
+    let b = a.filter(e => e.userName === userName)
+    let c = a.map(o =>{return o.email === email})
+    //console.log(c)
+    //console.log(b)
+    //  if(c.length > 0){
+    //      return res.send('email ya registrado')
+    //  }
+    
+     if(b.length > 0){
+       return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
+    } else{
+
     random = as()
     try {
         let userCreated = await User.create({
@@ -54,14 +70,16 @@ else{
             role,
             random
         })
-        console.log(email)
+
+
         const ID = userCreated.id
         await sendEmail(email, ID,random)
+
         res.send('todo ok')
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
-}
+    }
 }
 const putUserById = async (req, res) => {
 
@@ -123,9 +141,9 @@ const putUserById1 = async (req, res) => {
     // const { email, image, phoneNumber, role, address } = req.body;
     const { id } = req.params;
     const {random} = req.body
-
+    //console.log("2123")
     const bringUser = await User.findByPk(id, {});
-    console.log(bringUser.dataValues.role)
+   // console.log(bringUser.dataValues.role)
     if (bringUser.dataValues.random === random){
 
     let upUser = {};

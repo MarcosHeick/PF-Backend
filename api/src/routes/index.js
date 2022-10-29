@@ -11,9 +11,10 @@ const { postLogin, verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../controllers/SendEmail')
 const { postReview, getReview, getAllReview } = require('../controllers/Reviews')
+const {Payment,Feedback} = require ('../controllers/Payment')
 //para cloudinary
 const upload = require('../utils/multer');
-
+const path = require('path');
 
 const router = Router();
 
@@ -47,5 +48,10 @@ router.post('/send-email', sendEmail)
 router.post('/review/:product_id', postReview)
 router.get('/review/:product_id', getReview)
 router.get('/reviews', getAllReview)
-
+//Mercado pago
+router.post('/payment', Payment)
+router.get('/feedback', Feedback)
+router.get('/prueba',function(req,res){
+    res.sendFile(path.join(__dirname+'../../../prueba.html'))
+})
 module.exports = router;
