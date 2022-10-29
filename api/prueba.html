@@ -1,0 +1,33 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<body>
+  
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <div class="cho-container"></div>
+    
+    <script>
+        
+        console.log(localStorage)
+       const queryString = window.location.search
+       const urlParams = new URLSearchParams(queryString)
+       const preference= urlParams.get('preference')
+    const mp = new MercadoPago('TEST-cc61ccd4-1178-4e7e-aed9-e602d31cfef1',{ locale: 'es-AR',})
+          const a=fetch('https://velvet.up.railway.app/product')
+         .then(response => response.json())
+         .then(data => console.log(data)); 
+         const checkout = mp.checkout({
+            preference: {
+                id: preference
+            }
+        });
+        checkout.render({
+            
+            container: '.cho-container',
+            label: 'Pay'
+        });
+    </script>
+</body>
+</html>
