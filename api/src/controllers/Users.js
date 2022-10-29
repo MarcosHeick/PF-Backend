@@ -46,8 +46,10 @@ const postUsers = async function (req, res) {
 
     let a = await allUsers();
     //console.log("esto es a ", a)
+    
     let b = a.filter(e => e.userName === userName)
-    let c = a.filter(o => o.email.toLowerCase() === email.toLowerCase())
+    let c = a.filter(o => o.email?.toLowerCase() === email.toLowerCase())
+    console.log(c)
     //console.log(b)
     if(c.length > 0){
         return res.send('email ya registrado')
