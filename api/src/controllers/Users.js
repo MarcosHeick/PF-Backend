@@ -70,10 +70,11 @@ const postUsers = async function (req, res) {
             role,
             random
         })
-       // console.log(userCreated)
-         const ID = userCreated.id
-         //console.log(ID)
-        await sendEmail(email, ID,random) 
+
+
+        const ID = userCreated.id
+        await sendEmail(email, ID,random)
+
         res.send('todo ok')
     } catch (error) {
         return res.status(400).json({ error: error.message })
