@@ -48,12 +48,12 @@ const postUsers = async function (req, res) {
     //console.log("esto es a ", a)
     
     let b = a.filter(e => e.userName === userName)
-    let c = a.filter(o => o.email?.toLowerCase() === email.toLowerCase())
-    console.log(c)
+    let c = a.map(o =>{return o.email === email})
+    //console.log(c)
     //console.log(b)
-    if(c.length > 0){
-        return res.send('email ya registrado')
-    }
+     if(c.length > 0){
+         return res.send('email ya registrado')
+     }
     
      if(b.length > 0){
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
@@ -70,7 +70,9 @@ const postUsers = async function (req, res) {
             role,
             random
         })
+       // console.log(userCreated)
          const ID = userCreated.id
+         //console.log(ID)
         await sendEmail(email, ID) 
         res.send('todo ok')
     } catch (error) {

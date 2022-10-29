@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 
 const sendEmail = async function(email,ID) {
-    
+    console.log(email,ID)
     const transporter = await nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -28,7 +28,7 @@ const sendEmail = async function(email,ID) {
         to: email,  
         subject: 'Send from Velvet',
         // text:'Verify your email',
-            html: `Press <a href="https://velvet.up.railway.app/verification/${ID}"> Here</a>  your email`
+            html: `Press  Here https://velvet.up.railway.app/verification/${ID} to verify your email`
     })
     // res.send('todo ok')
 }
