@@ -51,9 +51,9 @@ const postUsers = async function (req, res) {
     let c = a.map(o =>{return o.email === email})
     //console.log(c)
     //console.log(b)
-    //  if(c.length > 0){
-    //      return res.send('email ya registrado')
-    //  }
+     if(c.length > 0){
+         return res.send('email ya registrado')
+     }
     
      if(b.length > 0){
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
