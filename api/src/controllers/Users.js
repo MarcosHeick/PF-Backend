@@ -33,7 +33,7 @@ const postUsers = async function (req, res) {
 
     
 
-    console.log('hola')
+    //console.log('hola')
     let {
         userName,
         password,
@@ -48,18 +48,18 @@ const postUsers = async function (req, res) {
     //console.log("esto es a ", a)
     
     let b = a.filter(e => e.userName === userName)
-    let c = a.map(o =>{return o.email === email})
-    //console.log(c)
+    let c = a.filter(o => o.email === email)
+    console.log(c)
     //console.log(b)
-     if(c.length > 0){
+     if(c[0]){
          return res.send('email ya registrado')
      }
     
-     if(b.length > 0){
+     if(b[0]){
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
     } else{
 
-    random = as()
+   const random = as()
     try {
         let userCreated = await User.create({
             userName,
@@ -70,7 +70,7 @@ const postUsers = async function (req, res) {
             role,
             random
         })
-
+        console.log(userCreated.dataValues)
 
         const ID = userCreated.id
         await sendEmail(email, ID,random)
