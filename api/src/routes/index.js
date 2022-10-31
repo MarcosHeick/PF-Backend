@@ -28,7 +28,7 @@ router.put('/product/:id_product', putProductById)
 router.post('/product/images', upload.array("imagen", 5), addImagesByIdProduct)
 router.post('/product/image', upload.single("imagen1"), addImagesByIdProductSingle)
 //rutas Users
-router.get('/users', getUsers)
+router.get('/users', verification, getUsers)
 router.post('/users', postUsers)
 router.put('/verification/:id', putUserById1)
 router.put('/users/:id', putUserById)
