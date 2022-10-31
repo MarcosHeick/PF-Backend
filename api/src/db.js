@@ -8,7 +8,7 @@ const {
 } = process.env;
  
 
-const sequelize = new Sequelize(`postgresql://postgres:lMYF0fmqDwHcddwq47e1@containers-us-west-58.railway.app:5676/railway`, {
+const sequelize = new Sequelize(`postgres://qdxcljxw:0nUSlq4EtcGa1nYdGPQ0e-vk3D8Mj-X8@babar.db.elephantsql.com/qdxcljxw`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });
@@ -33,7 +33,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Categories, OrderProduct, User, Image, Review ,Order,Size,Favorites,UserFav} = sequelize.models;
+const { Product, Categories, OrderProduct, User, Image, Review ,Order,Size,Favorite,UserFav} = sequelize.models;
 
 // Aca vendrian las relaciones
 //producto-categoria --->mucho a mucho 
@@ -88,15 +88,13 @@ Categories.belongsToMany(Product, {
   foreignKey: 'category_id'
 })
 // favs
-Favorites.belongsToMany(User, {
+Favorite.belongsToMany(User, {
   through: UserFav,
-  as: "Favorites",
-  foreignKey: 'favorite_id'
+ 
 })
 User.belongsToMany(Favorite, {
   through: UserFav,
-  as: "User",
-  foreignKey: 'favorite_id'
+  
 })
 //producto-Order --->M:M 
 Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
