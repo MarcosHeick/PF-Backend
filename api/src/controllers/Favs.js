@@ -23,21 +23,21 @@ const addFavorite = async function(req,res){
     idUser
    }= req.body
    
-   try{
+  try{
     //const prueba= await Favorite.create({idProduct:"123"})
     const bringUser = await User.findByPk(idUser, {});
    // console.log(bringUser)
         const favoriteCreated= await Favorite.findOrCreate({
             where : {idProduct:idProduct}
         })
-      //  console.log(favoriteCreated)
-const a=await bringUser.addFavorite(favoriteCreated,{through:  {up:boolean}})
+       console.log(favoriteCreated)
+const a=await bringUser.addFavorite(favoriteCreated[0],{through: {verify:boolean}})
 
         res.status(200).send(a)
-   }
+  }
    catch(error){
          
-    return res.status(400).json({ error: error })
+    return res.status(400).json({ error: error.message })
    }
 
 }
