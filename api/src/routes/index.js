@@ -15,6 +15,7 @@ const {Payment,Feedback} = require ('../controllers/Payment')
 //para cloudinary
 const upload = require('../utils/multer');
 const path = require('path');
+const { getFavorites,addFavorite } = require('../controllers/Favs');
 
 const router = Router();
 
@@ -54,4 +55,7 @@ router.get('/feedback', Feedback)
 router.get('/prueba',function(req,res){
     res.sendFile(path.join(__dirname+'../../../prueba.html'))
 })
+//Favorites
+router.get('/favorites',getFavorites)
+router.post('/favorites',addFavorite)
 module.exports = router;
