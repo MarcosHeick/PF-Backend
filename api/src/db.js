@@ -88,7 +88,7 @@ Categories.belongsToMany(Product, {
   foreignKey: 'category_id'
 })
 // favs
-Favorites.belongsToMany(User, {
+Favorite.belongsToMany(User, {
   through: UserFav,
   as: "Favorites",
   foreignKey: 'favorite_id'
