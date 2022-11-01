@@ -6,30 +6,7 @@ const app = express();
 const keys = require('../../settings/keys')
 app.set('key', keys.key)
 //console.log(app.get('key'))
-const postLogin = async function (req, res) {
-    
-    const {userName, password} = req.body
 
-    const Users = await allUsers();
-    //console.log('user de login ',Users)
-    const a = Users.filter( e => e.userName === userName)
-    console.log("hola",a[0].dataValues.password)
-    //console.log(a.length)
-    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
-    if(/* a.length && a[0].dataValues?.password === password */pas){
-        const payload = {
-            check:true
-        }
-        const token = jwt.sign(payload, app.get('key'),{
-            expiresIn:'1d'
-        })
-        res.json( [a[0] , {token: token }    ]   )
-    }else{
-        res.json({
-            menssage:'Usuario y/o password son incorrectos'
-        })
-    }
-}
 
 function verification (req,res,next){
     let token = req.headers['x-acces-token'] || req.headers['authorization'];
