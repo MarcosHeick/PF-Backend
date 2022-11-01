@@ -1,5 +1,6 @@
-const { User,Favorite ,UserFav} = require('../db')
 
+
+const { User,Favorite,UserFav} = require('../db')
 
 const { sendEmail } = require('./SendEmail')
 const as = () => {
@@ -13,7 +14,13 @@ const as = () => {
 }
 const allUsers = async function () {
 
-    const a= await User.findAll({include:[{ model: Favorite}]})
+
+    const a= await User.findAll({include:[{ model: Favorite} ]})
+
+
+return a
+
+
 
 //    const b = await a?.map(er=>{
 //     return {
@@ -30,6 +37,7 @@ const allUsers = async function () {
 // }
    //)
 return a
+
 }
 
 const getUsers = async function (req, res) {
@@ -37,6 +45,7 @@ const getUsers = async function (req, res) {
     try {
         let a = await allUsers()
         //console.log(a)
+        
         return res.status(200).send(a)
     } catch (error) {
 
@@ -66,9 +75,11 @@ const postUsers = async function (req, res) {
 
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
-    console.log(c)
-    //console.log(b)
+
+
+
      if(c[0]){
+
          return res.send('email ya registrado')
      }
     

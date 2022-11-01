@@ -22,12 +22,7 @@ const postLogin = async function (req, res) {
         const token = jwt.sign(payload, app.get('key'),{
             expiresIn:'1d'
         })
-        res.json({
-            message:'autentificacion correcta',
-            token: token,
-            id: a[0].dataValues.id,
-            role: a[0].dataValues.role
-        })
+        res.json( [a[0] , {token: token }    ]   )
     }else{
         res.json({
             menssage:'Usuario y/o password son incorrectos'

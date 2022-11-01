@@ -94,7 +94,7 @@ Favorite.belongsToMany(User, {
 })
 User.belongsToMany(Favorite, {
   through: UserFav,
-  
+
 })
 //producto-Order --->M:M 
 Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
