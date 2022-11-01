@@ -1,6 +1,6 @@
 const {getUsers, allUsers} = require('../controllers/Users')
 const jwt = require('jsonwebtoken');
-
+const bcryptjs = require('bcryptjs')
 const express = require('express');
 const app = express();
 const keys = require('../../settings/keys')
@@ -15,7 +15,8 @@ const postLogin = async function (req, res) {
     const a = Users.filter( e => e.userName === userName)
     console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
-    if(a.length && a[0].dataValues?.password === password){
+    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    if(/* a.length && a[0].dataValues?.password === password */pas){
         const payload = {
             check:true
         }
