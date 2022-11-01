@@ -1,8 +1,8 @@
-const {UserFav,Favorites} =require('../db')
+const {UserFav,Favorite,User} =require('../db')
 
 
 const getAllFavs = async function(){
-  const all = await Favorites.findAll()
+  const all = await Favorite.findAll()
     return all
 }
 const getFavorites = async function(req,res){
@@ -19,17 +19,22 @@ const getFavorites = async function(req,res){
 const addFavorite = async function(req,res){
   let {
     idProduct,
-    up
+    boolean,
+    idUser
    }= req.body
-
-   try{
-        const favoriteCreated= await Favorites.findOrCreate({
+   
+  try{
+    //const prueba= await Favorite.create({idProduct:"123"})
+    const bringUser = await User.findByPk(idUser, {});
+   // console.log(bringUser)
+        const favoriteCreated= await Favorite.findOrCreate({
             where : {idProduct:idProduct}
         })
-await favoriteCreated.addFavorite(idProduct, {through :{up:up}})
+       console.log(favoriteCreated)
+const a=await bringUser.addFavorite(favoriteCreated[0],{through: {verify:boolean}})
 
-
-   }
+        res.status(200).send(a)
+  }
    catch(error){
          
     return res.status(400).json({ error: error.message })

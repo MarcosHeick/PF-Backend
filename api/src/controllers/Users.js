@@ -1,4 +1,4 @@
-const { User } = require('../db')
+const { User,Favorites } = require('../db')
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
@@ -11,7 +11,9 @@ const as = () => {
 }
 const allUsers = async function () {
 
-    return await User.findAll()
+    return await User.findAll({
+        include: [{ model: Favorites}],
+    })
 
 
 
@@ -21,6 +23,7 @@ const getUsers = async function (req, res) {
     try {
         let a = await allUsers()
         //console.log(a)
+        
         return res.status(200).send(a)
     } catch (error) {
 
