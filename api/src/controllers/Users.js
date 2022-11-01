@@ -1,5 +1,5 @@
 
-
+const bcryptjs = require('bcryptjs')
 const { User,Favorite,UserFav} = require('../db')
 
 const { sendEmail } = require('./SendEmail')
@@ -72,7 +72,7 @@ const postUsers = async function (req, res) {
     let a = await allUsers();
     //console.log("esto es a ", a)
     
-
+    let pas = await bcryptjs.hash(password, 8)
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
 
@@ -92,7 +92,7 @@ const postUsers = async function (req, res) {
     try {
         let userCreated = await User.create({
             userName,
-            password,
+            password: pas,
             email,
             image,
             phoneNumber,
