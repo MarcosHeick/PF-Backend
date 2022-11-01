@@ -1,7 +1,11 @@
 
 const bcryptjs = require('bcryptjs')
 const { User,Favorite,UserFav} = require('../db')
-
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
+const keys = require('../../settings/keys')
+app.set('key', keys.key)
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
@@ -36,7 +40,7 @@ return a
 //     }
 // }
    //)
-return a
+
 
 }
 
@@ -104,7 +108,7 @@ const postUsers = async function (req, res) {
         const ID = userCreated.id
         await sendEmail(email, ID,random)
 
-        res.send('todo ok')
+        res.send(await postLogin(req,res))
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
@@ -194,5 +198,29 @@ const putUserById1 = async (req, res) => {
 
     // const fetchUsers = await User.findByPk(id_user,{})
 
+}
+const postLogin = async function (req, res) {
+    
+    const {userName, password} = req.body
+
+    const Users = await allUsers();
+    //console.log('user de login ',Users)
+    const a = Users.filter( e => e.userName === userName)
+    console.log("hola",a[0].dataValues.password)
+    //console.log(a.length)
+    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    if(/* a.length && a[0].dataValues?.password === password */pas){
+        const payload = {
+            check:true
+        }
+        const token = jwt.sign(payload, app.get('key'),{
+            expiresIn:'1d'
+        })
+        res.json( [a[0] , {token: token }    ]   )
+    }else{
+        res.json({
+            menssage:'Usuario y/o password son incorrectos'
+        })
+    }
 }
 module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 }
