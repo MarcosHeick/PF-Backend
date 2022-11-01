@@ -15,7 +15,7 @@ const as = () => {
 const allUsers = async function () {
 
 
-    const a= await User.findAll({include:[{ model: Favorite}]})
+    const a= await User.findAll({include:[{ model: Favorite} ]})
 
 
 return a

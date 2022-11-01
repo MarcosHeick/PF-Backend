@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('favorite', {
   
-    idProduct: {
+    verify: {
       type: DataTypes.STRING,
       allowNull:false,
     },

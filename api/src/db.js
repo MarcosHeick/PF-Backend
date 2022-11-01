@@ -90,13 +90,11 @@ Categories.belongsToMany(Product, {
 // favs
 Favorite.belongsToMany(User, {
   through: UserFav,
-  as: "Favorites",
-  foreignKey: 'favorite_id'
+ 
 })
 User.belongsToMany(Favorite, {
   through: UserFav,
-  as: "User",
-  foreignKey: 'favorite_id'
+
 })
 //producto-Order --->M:M 
 Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
