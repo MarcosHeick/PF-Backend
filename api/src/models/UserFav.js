@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
   sequelize.define('userFav', {
   
 
-    up :{
+    verify :{
         type : DataTypes.BOOLEAN,
         defaultValue: false
     }
