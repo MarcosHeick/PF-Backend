@@ -1,4 +1,7 @@
-const { User,Favorite } = require('../db')
+
+
+const { User,Favorite,UserFav} = require('../db')
+
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
@@ -11,13 +14,34 @@ const as = () => {
 }
 const allUsers = async function () {
 
+
     const a= await User.findAll({include:[{ model: Favorite}]})
 
+
+return a
+
+
+
+//    const b = await a?.map(er=>{
+//     return {
+//         id: er.id,
+//         userName:er.userName,
+//         email:er.email,
+//         password:er.password,
+//         image:er.image ,
+//         phoneNumber: er.phoneNumber,
+//         role:er.role ,
+//         random:er.random,
+//         favorites: er.favorites?.map(el=> {return{idProduct: el.idProduct, verify :el.userFav?.verify}})
+//     }
+// }
+   //)
 return a
 
 }
 
 const getUsers = async function (req, res) {
+    //console.log(res,req)
     try {
         let a = await allUsers()
         //console.log(a)
@@ -34,7 +58,7 @@ const postUsers = async function (req, res) {
 
     
 
-    console.log('hola')
+    //console.log('hola')
     let {
         userName,
         password,
@@ -48,19 +72,23 @@ const postUsers = async function (req, res) {
     let a = await allUsers();
     //console.log("esto es a ", a)
     
+
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
-    //console.log(c)
-    //console.log(b)
-    if(c[0]){
+
+
+
+     if(c[0]){
+
          return res.send('email ya registrado')
      }
     
      if(b[0]){
+
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
     } else{
 
-    random = as()
+   const random = as()
     try {
         let userCreated = await User.create({
             userName,
@@ -71,7 +99,7 @@ const postUsers = async function (req, res) {
             role,
             random
         })
-
+        console.log(userCreated.dataValues)
 
         const ID = userCreated.id
         await sendEmail(email, ID,random)

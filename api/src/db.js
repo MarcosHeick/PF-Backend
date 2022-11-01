@@ -8,8 +8,7 @@ const {
 } = process.env;
  
 
-const sequelize = new Sequelize(`postgres://qdxcljxw:0nUSlq4EtcGa1nYdGPQ0e-vk3D8Mj-X8@babar.db.elephantsql.com/qdxcljxw 
-`, {
+const sequelize = new Sequelize(`postgres://qdxcljxw:0nUSlq4EtcGa1nYdGPQ0e-vk3D8Mj-X8@babar.db.elephantsql.com/qdxcljxw`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });
@@ -89,13 +88,15 @@ Categories.belongsToMany(Product, {
   foreignKey: 'category_id'
 })
 // favs
-Favorite.belongsToMany(User, {
+Favorites.belongsToMany(User, {
   through: UserFav,
- 
+  as: "Favorites",
+  foreignKey: 'favorite_id'
 })
 User.belongsToMany(Favorite, {
   through: UserFav,
-  
+  as: "User",
+  foreignKey: 'favorite_id'
 })
 //producto-Order --->M:M 
 Product.belongsToMany(Order, { through: OrderProduct, foreignKey: 'order_id' })
