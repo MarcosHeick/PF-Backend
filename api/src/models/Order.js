@@ -51,8 +51,19 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     floor: {
+
+        type: DataTypes.STRING,
+        allowNull:false,
+    },
+    firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+
+
     }
   });
 };

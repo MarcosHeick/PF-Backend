@@ -43,13 +43,14 @@ const plusProduct = async function (req, res) {
                 productCreated.addImage(a[0])
             }
         }
-
+        console.log(size)
         if (size.length > 0) {
             for (let i = 0; i < size.length; i++) {
 
                 let a = await Size.findOrCreate({
                     where: { siz3: size[i] }
                 })
+                
                 productCreated.addSize(a[0])
             }
         }
@@ -107,9 +108,9 @@ const allProducts = async function () {
 }
 
 const getProducts = async function (req, res) {
+
     try {
         let a = await allProducts()
-        // console.log(a)
         res.status(200).send(a)
     } catch (error) {
         return res.status(400).json({ error: error.message })
@@ -131,15 +132,15 @@ const getProductsId = async function (req, res) {
 
 
 const getProductsByName = async function (req, res) {
-    // console.log(req.query);
+    console.log(req.query);
     const { search } = req.query;
-
+    
     try {
         const resultDbByName = await allProducts();
 
-        let a = search.toLowerCase();
+        let a = search?.toLowerCase();
 
-        const filterDbByName = resultDbByName.filter(prod => prod.name.toLowerCase().includes(a));
+    const filterDbByName = resultDbByName.filter(prod => prod.name?.toLowerCase().includes(a));
 
         res.status(200).json(filterDbByName)
 
@@ -209,7 +210,7 @@ const putProductById = async function (req, res) {
         req.body.mainImage && (obj.mainImage = req.body.mainImage)
         // req.body.image && (obj.image = req.body.image)
         req.body.bestSellers && (obj.bestSellers = req.body.bestSellers)
-
+        req.body.value && (obj.value = req.body.value)
         await Product.update(obj, { where: { id: id_product } })
         res.status(200).json(obj)
 
@@ -227,7 +228,7 @@ const addImagesByIdProduct = async (req, res) => {
     //   /product/images
 
 
-    if (!req.file) {
+    if (!req.files) {
         return res.json('Para continuar seleccione una imagen');
     }
 
