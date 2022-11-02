@@ -4,45 +4,54 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('order', {
-    /* id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      defaultValue:DataTypes.UUIDV4,
-      primaryKey:true
-    }, */
+    order_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement:true
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+
+    },
     status: {
-      type: DataTypes.ENUM('pending','completed','canceled'),
-      allowNull:false,
+      type: DataTypes.ENUM('pending', 'completed', 'canceled', 'created'),
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     direction: {
-        type: DataTypes.STRING,
-        allowNull:true,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     numAddress: {
-        type: DataTypes.STRING,
-        allowNull:true, 
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     postalCode: {
-        type: DataTypes.STRING,
-        allowNull:false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     province: {
-        type: DataTypes.STRING,
-        allowNull:false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     locality: {
-        type: DataTypes.STRING,
-        allowNull:false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     department: {
-        type: DataTypes.STRING,
-        allowNull:false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     floor: {
+
         type: DataTypes.STRING,
         allowNull:false,
     },
@@ -53,6 +62,7 @@ module.exports = (sequelize) => {
     lastName: {
       type: DataTypes.STRING,
       allowNull: false
+
 
     }
   });

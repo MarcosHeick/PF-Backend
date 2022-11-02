@@ -1,19 +1,20 @@
 const { mercadopago } = require('../utils/mercadoPago')
 
 const Payment = async (req, res) => {
-    const {name,id,stock,price} = req.body;
-    console.log(req.body.price)
-    
+    // const {name,id,stock,price} = req.body;
+    console.log(req.body)
+
     let preference = {
         items: [
             {
-                title: name,
-                unit_price: Number(price),
-                quantity: Number(stock)
+                title: req.body.title,
+                unit_price: Number(req.body.price),
+                quantity: Number(req.body.quantity)
             }
         ],
         back_urls: {
-            "success": "https://velvetpf.vercel.app/",
+
+            "success": "http://localhost:3000/ControlOrders",
             "failure": "http://localhost:3001/feedback",
             "pending": "http://localhost:3001/feedback"
         },
@@ -21,8 +22,8 @@ const Payment = async (req, res) => {
     }
 
     const response = await mercadopago.preferences.create(preference)
-    const preferenceId = response.body.id
-    res.status(200).send(preferenceId)
+    const preferenceId = response.body.init_point
+    res.status(200).json(preferenceId)
 
 }
 

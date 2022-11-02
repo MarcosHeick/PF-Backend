@@ -4,14 +4,14 @@ const { plusProduct, getProducts, getProductsId, getProductsByName, putProductBy
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-const { getUsers, postUsers, putUserById, putUserById1 } = require('../controllers/Users');
-const { getOrder } = require('../controllers/Order')
+const { getUsers, postUsers, putUserById, putUserById1, addOrder } = require('../controllers/Users');
+const { getOrder, sendEmailWithOrder, updateOrderState } = require('../controllers/Order')
 const { getOrderProduct } = require('../controllers/OrderProduct')
 const { postLogin, verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../controllers/SendEmail')
 const { postReview, getReview, getAllReview } = require('../controllers/Reviews')
-const {Payment,Feedback} = require ('../controllers/Payment')
+const { Payment, Feedback } = require('../controllers/Payment')
 //para cloudinary
 const upload = require('../utils/multer');
 const path = require('path');
@@ -33,6 +33,9 @@ router.get('/users', getUsers)
 router.post('/users', postUsers)
 router.put('/verification/:id', putUserById1)
 router.put('/users/:id', putUserById)
+
+router.post('/users/cart/:user_id', addOrder)
+
 //rutas Login
 router.post('/login', postLogin);
 router.get('/info', verification, (req, res) => {
@@ -40,6 +43,11 @@ router.get('/info', verification, (req, res) => {
 })
 //rutas Order
 router.get('/order', getOrder)
+router.put('/order/:order_id', updateOrderState)
+router.post('/order/sendingEmail', sendEmailWithOrder)
+
+
+
 //rutas OrderProduct
 router.get('/orderProduct', getOrderProduct)
 //router
@@ -52,10 +60,15 @@ router.get('/reviews', getAllReview)
 //Mercado pago
 router.post('/payment', Payment)
 router.get('/feedback', Feedback)
+
+
+
+
 router.get('/prueba',function(req,res){
     res.sendFile(path.join(__dirname+'../../../prueba.html'))
 })
 //Favorites
 router.get('/favorites',getFavorites)
 router.post('/favorites',addFavorite)
+
 module.exports = router;
