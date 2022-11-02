@@ -4,9 +4,10 @@ const bcryptjs = require('bcryptjs')
 const express = require('express');
 const app = express();
 const keys = require('../../settings/keys')
+const cors = require('cors')
 app.set('key', keys.key)
 //console.log(app.get('key'))
-
+app.use(cors())
 
 function verification (req,res,next){
     let token = req.headers['x-acces-token'] || req.headers['authorization'];
