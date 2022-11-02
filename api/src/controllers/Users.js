@@ -68,7 +68,7 @@ const postUsers = async function (req, res) {
         role,
         googleId
     } = req.body
-
+ 
     console.log(req.body)
 if (!googleId){
     let a = await allUsers();
