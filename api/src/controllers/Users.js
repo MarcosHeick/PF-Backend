@@ -264,7 +264,7 @@ const postLogin = async function (req, res) {
     const Users = await allUsers();
     //console.log('user de login ',Users)
     const a = Users.filter( e => e.userName === userName)
-    console.log("hola",a[0].dataValues.password)
+    //console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
     let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
     if(/* a.length && a[0].dataValues?.password === password */pas){
