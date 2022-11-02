@@ -68,7 +68,7 @@ const postUsers = async function (req, res) {
         role,
         googleId
     } = req.body
- 
+ //console.log(password,"hola mundo")
 
 if (!googleId){
     let a = await allUsers();
@@ -94,12 +94,13 @@ if (!googleId){
    const random = as()
     try {
         let userCreated = await User.findOrCreate({ where: { userName :userName},
-            password,
-            email,
-            image,
-            phoneNumber,
-            role,
-            random
+           defaults:{  
+            password: password,
+           email: email,
+           image,
+           phoneNumber,
+           role: role,
+           random: random}
         })
       //  console.log(userCreated.dataValues)
 
