@@ -66,11 +66,11 @@ const postUsers = async function (req, res) {
         image,
         phoneNumber,
         role,
-        googleID
+        googleId
     } = req.body
 
     //console.log(req.body)
-if (!googleID){
+if (!googleId){
     let a = await allUsers();
     //console.log("esto es a ", a)
     
