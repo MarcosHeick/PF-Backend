@@ -2,7 +2,7 @@ const { mercadopago } = require('../utils/mercadoPago')
 
 const Payment = async (req, res) => {
     // const {name,id,stock,price} = req.body;
-    // console.log(req.body.price)
+    console.log(req.body)
 
     let preference = {
         items: [
@@ -13,7 +13,7 @@ const Payment = async (req, res) => {
             }
         ],
         back_urls: {
-            "success": "https://velvetpf.vercel.app",
+            "success": "http://localhost:3000/ControlOrders",
             "failure": "http://localhost:3001/feedback",
             "pending": "http://localhost:3001/feedback"
         },

@@ -13,7 +13,8 @@ const plusProduct = async function (req, res) {
         type,
         mainImage,
         size,
-        bestSellers
+        bestSellers,
+    
     } = req.body
     console.log(req.body)
     try {
@@ -25,7 +26,8 @@ const plusProduct = async function (req, res) {
             description,
             type,
             mainImage,
-            bestSellers
+            bestSellers,
+            
         })
         const CategoriesDb = await Categories.findOrCreate({
             where: { name: category }
