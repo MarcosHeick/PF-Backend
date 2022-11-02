@@ -66,10 +66,13 @@ const postUsers = async function (req, res) {
         image,
         phoneNumber,
         role,
-        googleId
     } = req.body
+    let googleId=req.body.googleId
  //console.log(password,"hola mundo")
-
+ if(googleId===null){
+   googleId= false
+ }
+ 
 if (!googleId){
     let a = await allUsers();
     //console.log("esto es a ", a)
@@ -102,12 +105,15 @@ if (!googleId){
            role: role,
            random: random}
         })
-      //  console.log(userCreated.dataValues)
+     const user = userCreated[0].dataValues
 
-        const ID = userCreated.id
+        const ID = user.id
+        
+    if   (user.role==='inactive'){
         await sendEmail(email, ID,random)
-
-        res.send(await postLogin(req,res))
+        return res.send(await postLogin(req,res))}
+      else {  
+        res.send(await postLogin(req,res))}
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
