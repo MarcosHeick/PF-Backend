@@ -275,7 +275,7 @@ const postLogin = async function (req, res) {
         // const token = jwt.sign(payload,"secret" ,{
         //     expiresIn:'1d'
         // })
-        res.json( [a[0]] , token  )
+        res.json( [a[0] , token  ])
     }else{
         res.json({
             menssage:'Usuario y/o password son incorrectos'
