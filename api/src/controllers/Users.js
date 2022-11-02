@@ -4,7 +4,6 @@ const bcryptjs = require('bcryptjs')
 const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const app = express();
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
@@ -66,18 +65,19 @@ const postUsers = async function (req, res) {
         image,
         phoneNumber,
         role,
+        googleId,
     } = req.body
-    let googleId=req.body.googleId
- //console.log(password,"hola mundo")
- if(googleId===null){
+     let pas = await bcryptjs.hash(password, 8)
+ console.log(googleId)
+ if(googleId===undefined){
    googleId= false
  }
- 
-if (!googleId){
+
+if (googleId===false){
     let a = await allUsers();
     //console.log("esto es a ", a)
     
-    // let pas = await bcryptjs.hash(password, 8)
+    
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
 
@@ -91,7 +91,29 @@ if (!googleId){
      if(b[0]){
 
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
-    }} 
+
+    }
+ const random = as()
+    try {
+        let userCreated = await User.create({
+            userName,
+            password: pas,
+            email,
+            image,
+            phoneNumber,
+            role,
+            random
+        })
+        console.log(userCreated.dataValues)
+
+        const ID = userCreated.id
+        await sendEmail(email, ID,random)
+
+        res.send(await postLogin(req,res))
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+} 
+}
     else{
 
    const random = as()
@@ -108,7 +130,7 @@ if (!googleId){
      const user = userCreated[0].dataValues
 
         const ID = user.id
-        
+        console.log(user)
     if   (user.role==='inactive'){
         await sendEmail(email, ID,random)
         return res.send(await postLogin(req,res))}
@@ -272,11 +294,12 @@ const postLogin = async function (req, res) {
     const Users = await allUsers();
     //console.log('user de login ',Users)
     const a = Users.filter( e => e.userName === userName)
-    //console.log("hola",a[0].dataValues.password)
+    console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
-  //  let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    console.log("esto es pas ",pas)
   try{
-    if(/* a.length && a[0].dataValues?.password === password */true){
+    if(/* a.length && a[0].dataValues?.password === password */pas){
         const payload = {
             check:true
         }
@@ -296,5 +319,4 @@ const postLogin = async function (req, res) {
         res.status(200).send(json({ error: error.message }))
     }
 }
-
 module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder, postLogin};
