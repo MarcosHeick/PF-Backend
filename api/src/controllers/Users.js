@@ -69,7 +69,7 @@ const postUsers = async function (req, res) {
         googleId
     } = req.body
  
-    console.log(req.body)
+
 if (!googleId){
     let a = await allUsers();
     //console.log("esto es a ", a)
@@ -93,8 +93,7 @@ if (!googleId){
 
    const random = as()
     try {
-        let userCreated = await User.create({
-            userName,
+        let userCreated = await User.findOrCreate({ where: { userName :userName},
             password,
             email,
             image,
@@ -102,7 +101,7 @@ if (!googleId){
             role,
             random
         })
-        console.log(userCreated.dataValues)
+      //  console.log(userCreated.dataValues)
 
         const ID = userCreated.id
         await sendEmail(email, ID,random)
