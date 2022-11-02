@@ -285,4 +285,4 @@ const postLogin = async function (req, res) {
     }
 }
 
-module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder};
+module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder, postLogin};
