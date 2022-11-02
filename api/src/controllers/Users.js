@@ -65,15 +65,16 @@ const postUsers = async function (req, res) {
         email,
         image,
         phoneNumber,
-        role
+        role,
+        googleID
     } = req.body
 
     //console.log(req.body)
-
+if (!googleID){
     let a = await allUsers();
     //console.log("esto es a ", a)
     
-    let pas = await bcryptjs.hash(password, 8)
+    // let pas = await bcryptjs.hash(password, 8)
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
 
@@ -87,13 +88,14 @@ const postUsers = async function (req, res) {
      if(b[0]){
 
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
-    } else{
+    }} 
+    else{
 
    const random = as()
     try {
         let userCreated = await User.create({
             userName,
-            password: pas,
+            password,
             email,
             image,
             phoneNumber,
@@ -275,6 +277,7 @@ const postLogin = async function (req, res) {
         // const token = jwt.sign(payload,"secret" ,{
         //     expiresIn:'1d'
         // })
+        console.log([a[0] , token  ])
         res.json( [a[0] , token  ])
     }else{
         res.json({
