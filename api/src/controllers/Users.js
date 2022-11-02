@@ -266,19 +266,25 @@ const postLogin = async function (req, res) {
     const a = Users.filter( e => e.userName === userName)
     //console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
-    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
-    if(/* a.length && a[0].dataValues?.password === password */pas){
+  //  let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+  try{
+    if(/* a.length && a[0].dataValues?.password === password */true){
         const payload = {
             check:true
         }
-        const token = jwt.sign(payload, app.get('key'),{
+        const token = jwt.sign(payload,"secret" ,{
             expiresIn:'1d'
         })
-        res.json( [a[0] , {token: token }    ]   )
+        res.json( [a[0]   ]   )
     }else{
         res.json({
             menssage:'Usuario y/o password son incorrectos'
         })
+    }
+    
+    }
+    catch(error){
+        res.status(200).send(json({ error: error.message }))
     }
 }
 

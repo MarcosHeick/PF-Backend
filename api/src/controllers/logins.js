@@ -1,11 +1,11 @@
 const {getUsers, allUsers} = require('../controllers/Users')
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs')
-const express = require('express');
-const app = express();
+
+
 const keys = require('../../settings/keys')
 
-app.set('key', keys.key)
+// app.set('key', keys.key)
 //console.log(app.get('key'))
 
 
@@ -24,7 +24,7 @@ function verification (req,res,next){
     
     }
     if (token){
-        jwt.verify(token,app.get('key'), (error,decoded)=>{
+        jwt.verify(token,keys.key, (error,decoded)=>{
             if(error){
                 return res.json({
                     message:'Token Invalido'
