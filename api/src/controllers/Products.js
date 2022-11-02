@@ -13,7 +13,8 @@ const plusProduct = async function (req, res) {
         type,
         mainImage,
         size,
-        bestSellers
+        bestSellers,
+    
     } = req.body
     console.log(req.body)
     try {
@@ -25,7 +26,8 @@ const plusProduct = async function (req, res) {
             description,
             type,
             mainImage,
-            bestSellers
+            bestSellers,
+            
         })
         const CategoriesDb = await Categories.findOrCreate({
             where: { name: category }
@@ -106,9 +108,9 @@ const allProducts = async function () {
 }
 
 const getProducts = async function (req, res) {
+
     try {
         let a = await allProducts()
-        // console.log(a)
         res.status(200).send(a)
     } catch (error) {
         return res.status(400).json({ error: error.message })
@@ -208,7 +210,7 @@ const putProductById = async function (req, res) {
         req.body.mainImage && (obj.mainImage = req.body.mainImage)
         // req.body.image && (obj.image = req.body.image)
         req.body.bestSellers && (obj.bestSellers = req.body.bestSellers)
-
+        req.body.value && (obj.value = req.body.value)
         await Product.update(obj, { where: { id: id_product } })
         res.status(200).json(obj)
 

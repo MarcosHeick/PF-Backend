@@ -1,4 +1,13 @@
-const { User } = require('../db')
+
+
+const bcryptjs = require('bcryptjs')
+const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const app = express();
+const keys = require('../../settings/keys')
+app.set('key', keys.key)
+
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
@@ -11,16 +20,38 @@ const as = () => {
 }
 const allUsers = async function () {
 
-    return await User.findAll()
 
+    const a= await User.findAll({include:[{ model: Favorite} ]})
+
+
+return a
+
+
+
+//    const b = await a?.map(er=>{
+//     return {
+//         id: er.id,
+//         userName:er.userName,
+//         email:er.email,
+//         password:er.password,
+//         image:er.image ,
+//         phoneNumber: er.phoneNumber,
+//         role:er.role ,
+//         random:er.random,
+//         favorites: er.favorites?.map(el=> {return{idProduct: el.idProduct, verify :el.userFav?.verify}})
+//     }
+// }
+   //)
 
 
 }
 
 const getUsers = async function (req, res) {
+    //console.log(res,req)
     try {
         let a = await allUsers()
         //console.log(a)
+        
         return res.status(200).send(a)
     } catch (error) {
 
@@ -31,9 +62,6 @@ const getUsers = async function (req, res) {
 
 const postUsers = async function (req, res) {
 
-    
-
-    //console.log('hola')
     let {
         userName,
         password,
@@ -42,20 +70,25 @@ const postUsers = async function (req, res) {
         phoneNumber,
         role
     } = req.body
+
     //console.log(req.body)
 
     let a = await allUsers();
     //console.log("esto es a ", a)
     
+    let pas = await bcryptjs.hash(password, 8)
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
-    console.log(c)
-    //console.log(b)
+
+
+
      if(c[0]){
+
          return res.send('email ya registrado')
      }
     
      if(b[0]){
+
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
     } else{
 
@@ -63,7 +96,7 @@ const postUsers = async function (req, res) {
     try {
         let userCreated = await User.create({
             userName,
-            password,
+            password: pas,
             email,
             image,
             phoneNumber,
@@ -75,7 +108,7 @@ const postUsers = async function (req, res) {
         const ID = userCreated.id
         await sendEmail(email, ID,random)
 
-        res.send('todo ok')
+        res.send(await postLogin(req,res))
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
@@ -84,20 +117,20 @@ const postUsers = async function (req, res) {
 const putUserById = async (req, res) => {
 
     const { email, image, phoneNumber, userName } = req.body;
-    console.log("destructurados",email, image, phoneNumber, userName )
+    console.log("destructurados", email, image, phoneNumber, userName)
     let arr = {}
-    if(email)  arr.email = email
-    if(image){ 
-        let i = image.slice(12,image.length)
+    if (email) arr.email = email
+    if (image) {
+        let i = image.slice(12, image.length)
         console.log(i)
-        arr.image= i
+        arr.image = i
     }
-    if(phoneNumber)  arr.phoneNumber = phoneNumber
-    if(userName) arr.userName = userName
+    if (phoneNumber) arr.phoneNumber = phoneNumber
+    if (userName) arr.userName = userName
     const { id } = req.params;
     const reqBodyArray = Object.keys(arr)
     console.log("esto es arr ", arr)
-    console.log("esto es el body",reqBodyArray);
+    console.log("esto es el body", reqBodyArray);
 
     let upUser = {};
 
@@ -110,17 +143,17 @@ const putUserById = async (req, res) => {
                 upUser.email = req.body.email;
                 break;
             case 'image':
-                upUser.image = req.body.image.slice(12,req.body.image.length);
+                upUser.image = req.body.image.slice(12, req.body.image.length);
                 break;
             case 'phoneNumber':
                 upUser.phoneNumber = req.body.phoneNumber;
                 break;
-           /*  case 'address':
-                upUser.address = req.body.address;
-                break;
-            case 'role':
-                upUser.role = req.body.role;
-                break; */
+            /*  case 'address':
+                 upUser.address = req.body.address;
+                 break;
+             case 'role':
+                 upUser.role = req.body.role;
+                 break; */
         }
     });
 
@@ -140,30 +173,116 @@ const putUserById1 = async (req, res) => {
 
     // const { email, image, phoneNumber, role, address } = req.body;
     const { id } = req.params;
+
+    const { random } = req.body
+
+    const bringUser = await User.findByPk(id, {});
+    console.log(bringUser.dataValues.role)
+    if (bringUser.dataValues.random === random) {
+
     const {random} = req.body
     //console.log("2123")
     const bringUser = await User.findByPk(id, {});
    // console.log(bringUser.dataValues.role)
     if (bringUser.dataValues.random === random){
 
-    let upUser = {};
 
-    upUser.role = "active";
+        let upUser = {};
+
+        upUser.role = "active";
 
 
 
-    try {
-        await User.update(upUser, { where: { id } })
-        return res.status(200).json('updated information!!');
-    } catch (error) {
-        return res.status(400).json({ error: error.message })
+        try {
+            await User.update(upUser, { where: { id } })
+            return res.status(200).json('updated information!!');
+        } catch (error) {
+            return res.status(400).json({ error: error.message })
+        }
     }
-    }
-    else{
+    else {
         return res.status(404).json('Wrong Number verification')
     }
 
     // const fetchUsers = await User.findByPk(id_user,{})
 
 }
-module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 }
+
+
+const addOrder = async function (req, res) {
+    const { user_id } = req.params;
+
+    // const { price, quantity, product_id, firstName, lastName, email, postalCode, province, locality, department, floor, direction, numAddress } = req.body;
+    const { price, quantity,
+        product_id, firstName,
+        lastName, email, postalCode,
+        department, direction,
+        products } = req.body;
+
+    console.log(products);
+    const newOrder = await Order.findOrCreate({
+        // where: {
+        //     user_id, status: "created",
+        //     ...req.body
+        // }
+        where: {
+            user_id, status: "created", lastName, email, firstName, postalCode, department,
+            direction, floor: "", province: "", locality: ""
+        }
+        // where: {
+        //     user_id, status: "cart", lastName: "", email: "", firstName: "", postalCode: "", province: "", locality: "", department: "", floor: "",
+        //     direction: "", numAddress: ""
+        // }
+    })
+    console.log(newOrder);
+
+
+    let order_id = newOrder[0].dataValues.order_id;
+    console.log(order_id);
+
+    products.map(e => {
+        console.log(e.id);
+        console.log(e.price);
+        console.log(e.cantidad);
+
+
+        OrderProduct.create({
+            productId: e.id,
+            price: e.price,
+            quantity: e.cantidad,
+            orderOrderId: order_id
+        })
+    })
+
+    res.status(200).json('todo ok')
+
+}
+
+
+
+const postLogin = async function (req, res) {
+    
+    const {userName, password} = req.body
+
+    const Users = await allUsers();
+    //console.log('user de login ',Users)
+    const a = Users.filter( e => e.userName === userName)
+    console.log("hola",a[0].dataValues.password)
+    //console.log(a.length)
+    let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    if(/* a.length && a[0].dataValues?.password === password */pas){
+        const payload = {
+            check:true
+        }
+        const token = jwt.sign(payload, app.get('key'),{
+            expiresIn:'1d'
+        })
+        res.json( [a[0] , {token: token }    ]   )
+    }else{
+        res.json({
+            menssage:'Usuario y/o password son incorrectos'
+        })
+    }
+}
+module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder}
+
