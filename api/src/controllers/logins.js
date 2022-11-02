@@ -11,7 +11,7 @@ const keys = require('../../settings/keys')
 
 function verification (req,res,next){
     let token = req.headers['x-acces-token'] || req.headers['authorization'];
-    console.log(req.headers)
+  //  console.log(req.headers)
     if (!token){
         res.status(401).send({
             error:'Necesitas token'
@@ -21,7 +21,7 @@ function verification (req,res,next){
     }
     if (token?.startsWith('Bearer ')){
         token = token.slice(7,token.length)
-    
+    console.log(token)
     }
     if (token){
         jwt.verify(token,keys.key, (error,decoded)=>{
