@@ -260,7 +260,7 @@ const addOrder = async function (req, res) {
 const postLogin = async function (req, res) {
     
     const {userName, password} = req.body
-
+    const token = "123123"
     const Users = await allUsers();
     //console.log('user de login ',Users)
     const a = Users.filter( e => e.userName === userName)
@@ -272,10 +272,10 @@ const postLogin = async function (req, res) {
         const payload = {
             check:true
         }
-        const token = jwt.sign(payload,"secret" ,{
-            expiresIn:'1d'
-        })
-        res.json( [a[0]   ]   )
+        // const token = jwt.sign(payload,"secret" ,{
+        //     expiresIn:'1d'
+        // })
+        res.json( [a[0]] , token  )
     }else{
         res.json({
             menssage:'Usuario y/o password son incorrectos'
