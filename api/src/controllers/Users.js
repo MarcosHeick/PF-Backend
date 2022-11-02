@@ -67,6 +67,7 @@ const postUsers = async function (req, res) {
         role,
         googleId,
     } = req.body
+    console.log(password)
      let pas = await bcryptjs.hash(password, 8)
  //console.log(pas)
  if(googleId===undefined){
