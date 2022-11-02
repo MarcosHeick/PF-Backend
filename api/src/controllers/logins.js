@@ -38,4 +38,4 @@ function verification (req,res,next){
     };
 
 
-module.exports = {postLogin,verification}
+module.exports = {verification}

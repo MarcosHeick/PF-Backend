@@ -207,7 +207,7 @@ const putUserById1 = async (req, res) => {
     // const fetchUsers = await User.findByPk(id_user,{})
 
 }
-
+}
 
 const addOrder = async function (req, res) {
     const { user_id } = req.params;
@@ -284,5 +284,5 @@ const postLogin = async function (req, res) {
         })
     }
 }
-module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder}
 
+module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder};
