@@ -120,7 +120,7 @@ if (googleId===false){
     try {
         let userCreated = await User.findOrCreate({ where: { userName :userName},
            defaults:{  
-            password: password,
+            password: pas,
            email: email,
            image,
            phoneNumber,
