@@ -4,10 +4,7 @@ const bcryptjs = require('bcryptjs')
 const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const app = express();
-const cors = require('cors')
-//console.log(app.get('key'))
-app.use(cors())
+
 const { sendEmail } = require('./SendEmail')
 const as = () => {
     const len = 8
