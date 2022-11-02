@@ -68,7 +68,7 @@ const postUsers = async function (req, res) {
         googleId,
     } = req.body
      let pas = await bcryptjs.hash(password, 8)
- console.log(googleId)
+ //console.log(pas)
  if(googleId===undefined){
    googleId= false
  }
@@ -104,7 +104,7 @@ if (googleId===false){
             role,
             random
         })
-        console.log(userCreated.dataValues)
+      //  console.log(userCreated.dataValues)
 
         const ID = userCreated.id
         await sendEmail(email, ID,random)
@@ -124,18 +124,12 @@ if (googleId===false){
            email: email,
            image,
            phoneNumber,
-           role: role,
+           role: "active",
            random: random}
         })
-     const user = userCreated[0].dataValues
+   
 
-        const ID = user.id
-        console.log(user)
-    if   (user.role==='inactive'){
-        await sendEmail(email, ID,random)
-        return res.send(await postLogin(req,res))}
-      else {  
-        res.send(await postLogin(req,res))}
+        res.send(await postLogin(req,res))
     } catch (error) {
         return res.status(400).json({ error: error.message })
     }
