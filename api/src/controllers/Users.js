@@ -69,7 +69,7 @@ const postUsers = async function (req, res) {
         googleId
     } = req.body
 
-    //console.log(req.body)
+    console.log(req.body)
 if (!googleId){
     let a = await allUsers();
     //console.log("esto es a ", a)
