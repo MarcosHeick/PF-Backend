@@ -9,7 +9,7 @@ const {
 
 mercadopago.configure({
 
-    access_token: "TEST-4011887028534633-102808-cda46b3df10c2883b642c4ce78c8aee5-569834122",
+    access_token: PROD_ACCESS_TOKEN,
 
 
 });
