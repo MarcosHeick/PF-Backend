@@ -5,7 +5,11 @@ const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const { sendEmail } = require('./SendEmail');
+
 const { ARRAY } = require('sequelize');
+
+const keys = require('../../settings/keys');
+
 const as = () => {
     const len = 8
     let randStr = ''
@@ -286,9 +290,9 @@ const addOrder = async function (req, res) {
 const postLogin = async function (req, res) {
     
     const {userName, password} = req.body
-    const token = "123123"
+
     const Users = await allUsers();
-    //console.log('user de login ',Users)
+
     const a = Users.filter( e => e.userName === userName)
     console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
@@ -299,9 +303,9 @@ const postLogin = async function (req, res) {
         const payload = {
             check:true
         }
-        // const token = jwt.sign(payload,"secret" ,{
-        //     expiresIn:'1d'
-        // })
+       const token = jwt.sign(payload,keys.key ,{
+            expiresIn:'1d'
+         })
         console.log([a[0] , token  ])
         res.json( [a[0] , token  ])
     }else{
