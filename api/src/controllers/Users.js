@@ -166,7 +166,7 @@ const putUserById = async (req, res) => {
                 upUser.email = req.body.email;
                 break;
             case 'image':
-                upUser.image = req.body.image.slice(12, req.body.image.length);
+                upUser.image = req.body.image;
                 break;
             case 'phoneNumber':
                 upUser.phoneNumber = req.body.phoneNumber;
