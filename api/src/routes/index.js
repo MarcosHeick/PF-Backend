@@ -4,10 +4,10 @@ const { plusProduct, getProducts, getProductsId, getProductsByName, putProductBy
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-const { getUsers, postUsers, putUserById, putUserById1, addOrder } = require('../controllers/Users');
+const { getUsers, postUsers, putUserById, putUserById1, addOrder , postLogin} = require('../controllers/Users');
 const { getOrder, sendEmailWithOrder, updateOrderState } = require('../controllers/Order')
 const { getOrderProduct } = require('../controllers/OrderProduct')
-const { postLogin, verification } = require('../controllers/logins')
+const { verification } = require('../controllers/logins')
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../controllers/SendEmail')
 const { postReview, getReview, getAllReview } = require('../controllers/Reviews')
@@ -29,7 +29,7 @@ router.put('/product/:id_product', putProductById)
 router.post('/product/images', upload.array("imagen", 5), addImagesByIdProduct)
 router.post('/product/image', upload.single("imagen1"), addImagesByIdProductSingle)
 //rutas Users
-router.get('/users', verification, getUsers)
+router.get('/users',  getUsers)
 router.post('/users', postUsers)
 router.put('/verification/:id', putUserById1)
 router.put('/users/:id', putUserById)

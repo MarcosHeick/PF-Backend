@@ -2,11 +2,10 @@ const { OrderProduct } = require('../db')
 
 
 const allOrderProduct = async function () {
-    try {
+
         return await OrderProduct.findAll()
-    } catch (error) {
-        return res.status(400).json({ error: error.message })
-    }
+  
+    
 }
 
 const getOrderProduct = async function (req, res) {

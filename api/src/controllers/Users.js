@@ -4,11 +4,8 @@ const bcryptjs = require('bcryptjs')
 const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const app = express();
-const keys = require('../../settings/keys')
-app.set('key', keys.key)
-
-const { sendEmail } = require('./SendEmail')
+const { sendEmail } = require('./SendEmail');
+const { ARRAY } = require('sequelize');
 const as = () => {
     const len = 8
     let randStr = ''
@@ -68,15 +65,21 @@ const postUsers = async function (req, res) {
         email,
         image,
         phoneNumber,
-        role
+        role,
+        googleId,
     } = req.body
+    console.log(password)
+     let pas = await bcryptjs.hash(password, 8)
+ //console.log(pas)
+ if(googleId===undefined){
+   googleId= false
+ }
 
-    //console.log(req.body)
-
+if (googleId===false){
     let a = await allUsers();
     //console.log("esto es a ", a)
     
-    let pas = await bcryptjs.hash(password, 8)
+    
     let b = a.filter(e => e.userName === userName)
     let c = a.filter(o => o.email === email)
 
@@ -90,9 +93,9 @@ const postUsers = async function (req, res) {
      if(b[0]){
 
        return res.status(200).send('ya tenemos creado ese usuario, prueba con otro')
-    } else{
 
-   const random = as()
+    }
+ const random = as()
     try {
         let userCreated = await User.create({
             userName,
@@ -103,10 +106,30 @@ const postUsers = async function (req, res) {
             role,
             random
         })
-        console.log(userCreated.dataValues)
+      //  console.log(userCreated.dataValues)
 
         const ID = userCreated.id
         await sendEmail(email, ID,random)
+
+        res.send(await postLogin(req,res))
+    } catch (error) {
+        return res.status(400).json({ error: error.message })
+} 
+}
+    else{
+
+   const random = as()
+    try {
+        let userCreated = await User.findOrCreate({ where: { userName :userName},
+           defaults:{  
+            password: pas,
+           email: email,
+           image,
+           phoneNumber,
+           role: "active",
+           random: random}
+        })
+   
 
         res.send(await postLogin(req,res))
     } catch (error) {
@@ -120,11 +143,11 @@ const putUserById = async (req, res) => {
     console.log("destructurados", email, image, phoneNumber, userName)
     let arr = {}
     if (email) arr.email = email
-    if (image) {
-        let i = image.slice(12, image.length)
+    if (image) arr.image = image     
+        /* let i = image.slice(12, image.length)
         console.log(i)
-        arr.image = i
-    }
+        arr.image = i */
+    
     if (phoneNumber) arr.phoneNumber = phoneNumber
     if (userName) arr.userName = userName
     const { id } = req.params;
@@ -207,7 +230,7 @@ const putUserById1 = async (req, res) => {
     // const fetchUsers = await User.findByPk(id_user,{})
 
 }
-
+}
 
 const addOrder = async function (req, res) {
     const { user_id } = req.params;
@@ -263,26 +286,33 @@ const addOrder = async function (req, res) {
 const postLogin = async function (req, res) {
     
     const {userName, password} = req.body
-
+    const token = "123123"
     const Users = await allUsers();
     //console.log('user de login ',Users)
     const a = Users.filter( e => e.userName === userName)
     console.log("hola",a[0].dataValues.password)
     //console.log(a.length)
     let pas = await bcryptjs.compare(password, a[0].dataValues?.password)
+    console.log("esto es pas ",pas)
+  try{
     if(/* a.length && a[0].dataValues?.password === password */pas){
         const payload = {
             check:true
         }
-        const token = jwt.sign(payload, app.get('key'),{
-            expiresIn:'1d'
-        })
-        res.json( [a[0] , {token: token }    ]   )
+        // const token = jwt.sign(payload,"secret" ,{
+        //     expiresIn:'1d'
+        // })
+        console.log([a[0] , token  ])
+        res.json( [a[0] , token  ])
     }else{
         res.json({
             menssage:'Usuario y/o password son incorrectos'
         })
     }
+    
+    }
+    catch(error){
+        res.status(200).send(json({ error: error.message }))
+    }
 }
-module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder}
-
+module.exports = { getUsers, postUsers, putUserById, allUsers, putUserById1 , addOrder, postLogin};
