@@ -13,9 +13,8 @@ const Payment = async (req, res) => {
             }
         ],
         back_urls: {
-
-            "success": "http://localhost:3000/ControlOrders",
-            "failure": "http://localhost:3001/feedback",
+            "success": "https://velvetpf.vercel.app/ControlOrders/1",
+            "failure": "https://velvetpf.vercel.app/ControlOrders/0",
             "pending": "http://localhost:3001/feedback"
         },
         auto_return: "approved",
