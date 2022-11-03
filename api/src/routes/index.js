@@ -21,7 +21,7 @@ const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
-router.post('/product',verification, plusProduct)
+router.post('/product', plusProduct)
 router.get('/product', getProducts)
 router.get('/product/:id', getProductsId)
 router.get('/products', getProductsByName)
