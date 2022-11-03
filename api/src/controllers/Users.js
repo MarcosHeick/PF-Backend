@@ -5,7 +5,11 @@ const { User,Favorite,UserFav,Order, OrderProduct} = require('../db')
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const { sendEmail } = require('./SendEmail');
+
+const { ARRAY } = require('sequelize');
+
 const keys = require('../../settings/keys');
+
 const as = () => {
     const len = 8
     let randStr = ''
@@ -143,11 +147,11 @@ const putUserById = async (req, res) => {
     console.log("destructurados", email, image, phoneNumber, userName)
     let arr = {}
     if (email) arr.email = email
-    if (image) {
-        let i = image.slice(12, image.length)
+    if (image) arr.image = image     
+        /* let i = image.slice(12, image.length)
         console.log(i)
-        arr.image = i
-    }
+        arr.image = i */
+    
     if (phoneNumber) arr.phoneNumber = phoneNumber
     if (userName) arr.userName = userName
     const { id } = req.params;
@@ -166,7 +170,7 @@ const putUserById = async (req, res) => {
                 upUser.email = req.body.email;
                 break;
             case 'image':
-                upUser.image = req.body.image.slice(12, req.body.image.length);
+                upUser.image = req.body.image; 
                 break;
             case 'phoneNumber':
                 upUser.phoneNumber = req.body.phoneNumber;
