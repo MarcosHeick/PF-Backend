@@ -143,7 +143,7 @@ const putUserById = async (req, res) => {
     console.log("destructurados", email, image, phoneNumber, userName)
     let arr = {}
     if (email) arr.email = email
-    if (image) arr.image = image    
+    if (image) arr.image = image     
         /* let i = image.slice(12, image.length)
         console.log(i)
         arr.image = i */
